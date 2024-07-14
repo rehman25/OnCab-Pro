@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "230350784895",
+    "project_id": "oncab-10cce",
+    "storage_bucket": "oncab-10cce.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:230350784895:android:69dfee4b8ace4aef58324a",
+        "android_client_info": {
+          "package_name": "com.alitacode.oncab"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9u05eUDSKOOINuktZkpX3LowpTS1ov-M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
