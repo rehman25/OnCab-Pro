@@ -1257,14 +1257,17 @@ class DashboardScreenState extends State<DashboardScreen> {
           child: Container(
             padding: EdgeInsets.all(4),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Color(0xFF0e2345),
               boxShadow: [
                 BoxShadow(
                     color: Colors.black.withOpacity(0.2), spreadRadius: 1),
               ],
               borderRadius: BorderRadius.circular(defaultRadius),
             ),
-            child: Icon(Icons.drag_handle),
+            child: Icon(
+              Icons.drag_handle,
+              color: Colors.white,
+            ),
           ),
         ),
         Align(
@@ -1272,7 +1275,7 @@ class DashboardScreenState extends State<DashboardScreen> {
           child: Container(
             padding: EdgeInsets.all(5),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Color(0xFF0e2345),
               boxShadow: [
                 BoxShadow(
                     color: Colors.black.withOpacity(0.2), spreadRadius: 1),
@@ -1288,14 +1291,14 @@ class DashboardScreenState extends State<DashboardScreen> {
                   margin: EdgeInsets.only(right: 8),
                   padding: EdgeInsets.all(4),
                   decoration: BoxDecoration(
-                      color: isOffLine ? Colors.green : Colors.grey,
+                      color: isOffLine ? Colors.green : Colors.red,
                       shape: BoxShape.circle),
                 ),
                 Text(
                     isOffLine
                         ? language.youAreOnlineNow
                         : language.youAreOfflineNow,
-                    style: secondaryTextStyle(color: primaryColor)),
+                    style: secondaryTextStyle(color: Colors.white)),
               ],
             ),
           ),
@@ -1308,14 +1311,17 @@ class DashboardScreenState extends State<DashboardScreen> {
           child: Container(
             padding: EdgeInsets.all(4),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Color(0xFF0e2345),
               boxShadow: [
                 BoxShadow(
                     color: Colors.black.withOpacity(0.2), spreadRadius: 1),
               ],
               borderRadius: BorderRadius.circular(defaultRadius),
             ),
-            child: Icon(Ionicons.notifications_outline),
+            child: Icon(
+              Ionicons.notifications_outline,
+              color: Colors.white,
+            ),
           ),
         ),
       ],
@@ -1337,16 +1343,16 @@ class DashboardScreenState extends State<DashboardScreen> {
         inactiveText: language.offLine,
         activeText: language.online,
         showOnOff: true,
-        activeTextColor: Colors.green,
-        inactiveTextColor: Colors.black,
-        activeIcon:
-            ImageIcon(AssetImage(ic_green_car), color: Colors.white, size: 40),
+        activeTextColor: Colors.white,
+        inactiveTextColor: Colors.white,
+        activeIcon: ImageIcon(AssetImage(ic_green_car),
+            color: Color(0xFF0e2345), size: 40),
         inactiveIcon:
             ImageIcon(AssetImage(ic_red_car), color: Colors.white, size: 40),
-        activeColor: Colors.white,
+        activeColor: Color(0xFF0e2345),
         activeToggleColor: Colors.green,
         inactiveToggleColor: Colors.red,
-        inactiveColor: Colors.white,
+        inactiveColor: Color(0xFF0e2345),
         onToggle: (value) async {
           await showConfirmDialogCustom(
               dialogType: DialogType.CONFIRMATION,

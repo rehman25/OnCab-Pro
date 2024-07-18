@@ -34,7 +34,7 @@ class _DrawerComponentState extends State<DrawerComponent> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xFF0e2345),
       child: SingleChildScrollView(
         padding: EdgeInsets.all(16),
         child: Column(
@@ -48,16 +48,31 @@ class _DrawerComponentState extends State<DrawerComponent> {
                   children: [
                     ClipRRect(
                       borderRadius: radius(),
-                      child: commonCachedNetworkImage(appStore.userProfile.validate().validate(), height: 70, width: 70, fit: BoxFit.cover),
+                      child: commonCachedNetworkImage(
+                          appStore.userProfile.validate().validate(),
+                          height: 70,
+                          width: 70,
+                          fit: BoxFit.cover),
                     ),
                     SizedBox(width: 8),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(sharedPref.getString(FIRST_NAME).validate().capitalizeFirstLetter() + " " + sharedPref.getString(LAST_NAME).validate().capitalizeFirstLetter(), style: boldTextStyle()),
+                          Text(
+                              sharedPref
+                                      .getString(FIRST_NAME)
+                                      .validate()
+                                      .capitalizeFirstLetter() +
+                                  " " +
+                                  sharedPref
+                                      .getString(LAST_NAME)
+                                      .validate()
+                                      .capitalizeFirstLetter(),
+                              style: boldTextStyle(color: Colors.white)),
                           SizedBox(height: 4),
-                          Text(appStore.userEmail, style: secondaryTextStyle()),
+                          Text(appStore.userEmail,
+                              style: secondaryTextStyle(color: Colors.white)),
                         ],
                       ),
                     ),
@@ -72,7 +87,8 @@ class _DrawerComponentState extends State<DrawerComponent> {
                 icon: FontAwesome.user_o,
                 onTap: () {
                   Navigator.pop(context);
-                  launchScreen(context, EditProfileScreen(), pageRouteAnimation: PageRouteAnimation.Slide);
+                  launchScreen(context, EditProfileScreen(),
+                      pageRouteAnimation: PageRouteAnimation.Slide);
                 }),
             DrawerWidget(
                 title: language.rides,
@@ -80,7 +96,8 @@ class _DrawerComponentState extends State<DrawerComponent> {
                 icon: Ionicons.car_outline,
                 onTap: () {
                   Navigator.pop(context);
-                  launchScreen(context, RidesListScreen(), pageRouteAnimation: PageRouteAnimation.Slide);
+                  launchScreen(context, RidesListScreen(),
+                      pageRouteAnimation: PageRouteAnimation.Slide);
                 }),
             DrawerWidget(
                 title: language.vehicleInfo,
@@ -88,7 +105,8 @@ class _DrawerComponentState extends State<DrawerComponent> {
                 icon: Ionicons.car_outline,
                 onTap: () {
                   Navigator.pop(context);
-                  launchScreen(context, VehicleScreen(), pageRouteAnimation: PageRouteAnimation.Slide);
+                  launchScreen(context, VehicleScreen(),
+                      pageRouteAnimation: PageRouteAnimation.Slide);
                 }),
             DrawerWidget(
                 title: language.wallet,
@@ -96,14 +114,16 @@ class _DrawerComponentState extends State<DrawerComponent> {
                 icon: Ionicons.ios_wallet_outline,
                 onTap: () {
                   Navigator.pop(context);
-                  launchScreen(context, WalletScreen(), pageRouteAnimation: PageRouteAnimation.Slide);
+                  launchScreen(context, WalletScreen(),
+                      pageRouteAnimation: PageRouteAnimation.Slide);
                 }),
             DrawerWidget(
                 title: language.emergencyContacts,
                 iconData: ic_emergency,
                 onTap: () {
                   Navigator.pop(context);
-                  launchScreen(context, EmergencyContactScreen(), pageRouteAnimation: PageRouteAnimation.Slide);
+                  launchScreen(context, EmergencyContactScreen(),
+                      pageRouteAnimation: PageRouteAnimation.Slide);
                 }),
             DrawerWidget(
                 title: language.earnings,
@@ -111,7 +131,8 @@ class _DrawerComponentState extends State<DrawerComponent> {
                 icon: Ionicons.ios_wallet_outline,
                 onTap: () {
                   Navigator.pop(context);
-                  launchScreen(context, EarningScreen(), pageRouteAnimation: PageRouteAnimation.Slide);
+                  launchScreen(context, EarningScreen(),
+                      pageRouteAnimation: PageRouteAnimation.Slide);
                 }),
             DrawerWidget(
                 title: language.documents,
@@ -119,7 +140,8 @@ class _DrawerComponentState extends State<DrawerComponent> {
                 iconData: ic_verify_document,
                 onTap: () {
                   Navigator.pop(context);
-                  launchScreen(context, DocumentsScreen(), pageRouteAnimation: PageRouteAnimation.Slide);
+                  launchScreen(context, DocumentsScreen(),
+                      pageRouteAnimation: PageRouteAnimation.Slide);
                 }),
             DrawerWidget(
                 title: language.bankInfo,
@@ -127,13 +149,15 @@ class _DrawerComponentState extends State<DrawerComponent> {
                 icon: MaterialCommunityIcons.bank_outline,
                 onTap: () {
                   Navigator.pop(context);
-                  launchScreen(context, BankInfoScreen(), pageRouteAnimation: PageRouteAnimation.Slide);
+                  launchScreen(context, BankInfoScreen(),
+                      pageRouteAnimation: PageRouteAnimation.Slide);
                 }),
             DrawerWidget(
                 title: language.settings,
                 iconData: ic_setting,
                 onTap: () {
-                  launchScreen(context, SettingScreen(), pageRouteAnimation: PageRouteAnimation.Slide);
+                  launchScreen(context, SettingScreen(),
+                      pageRouteAnimation: PageRouteAnimation.Slide);
                 }),
             DrawerWidget(
                 title: language.logOut,

@@ -10,7 +10,11 @@ class DrawerWidget extends StatefulWidget {
   final IconData? icon;
   final Function() onTap;
 
-  DrawerWidget({required this.title, required this.iconData, this.icon, required this.onTap});
+  DrawerWidget(
+      {required this.title,
+      required this.iconData,
+      this.icon,
+      required this.onTap});
 
   @override
   DrawerWidgetState createState() => DrawerWidgetState();
@@ -27,20 +31,24 @@ class DrawerWidgetState extends State<DrawerWidget> {
     return inkWellWidget(
       onTap: widget.onTap,
       child: Padding(
-        padding:  EdgeInsets.symmetric(vertical:  8.0),
+        padding: EdgeInsets.symmetric(vertical: 8.0),
         child: Column(
           children: [
             Row(
               children: [
                 Container(
-                  decoration: BoxDecoration(border: Border.all(color: dividerColor), borderRadius: radius(defaultRadius)),
-                  child: Image.asset(widget.iconData, height: 30, width: 30),
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.white),
+                      borderRadius: radius(defaultRadius)),
+                  child: Image.asset(widget.iconData,
+                      height: 30, width: 30, color: Colors.white),
                 ),
                 SizedBox(width: 14),
                 Expanded(
-                  child: Text(widget.title, style: primaryTextStyle()),
+                  child: Text(widget.title,
+                      style: primaryTextStyle(color: Colors.white)),
                 ),
-                Icon(Icons.arrow_forward_ios, size: 16, color: dividerColor)
+                Icon(Icons.arrow_forward_ios, size: 16, color: Colors.red)
               ],
             ),
           ],
