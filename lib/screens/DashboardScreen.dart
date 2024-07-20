@@ -324,6 +324,7 @@ class DashboardScreenState extends State<DashboardScreen> {
       if (value.onRideRequest != null) {
         appStore.currentRiderRequest = value.onRideRequest;
         servicesListData = value.onRideRequest;
+        print('${servicesListData} checked');
 
         userDetail(driverId: value.onRideRequest!.riderId);
 
