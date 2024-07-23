@@ -159,21 +159,21 @@ class _DrawerComponentState extends State<DrawerComponent> {
                   launchScreen(context, SettingScreen(),
                       pageRouteAnimation: PageRouteAnimation.Slide);
                 }),
-            DrawerWidget(
-                title: language.logOut,
-                iconData: ic_logout,
-                onTap: () async {
-                  await showConfirmDialogCustom(context,
-                      primaryColor: primaryColor,
-                      dialogType: DialogType.CONFIRMATION,
-                      title: language.areYouSureYouWantToLogoutThisApp,
-                      positiveText: language.yes,
-                      negativeText: language.no, onAccept: (v) async {
-                    widget.onCall!();
-                    await Future.delayed(Duration(milliseconds: 500));
-                    await logout();
-                  });
-                }),
+            // DrawerWidget(
+            //     title: language.logOut,
+            //     iconData: ic_logout,
+            //     onTap: () async {
+            //       await showConfirmDialogCustom(context,
+            //           primaryColor: primaryColor,
+            //           dialogType: DialogType.CONFIRMATION,
+            //           title: language.areYouSureYouWantToLogoutThisApp,
+            //           positiveText: language.yes,
+            //           negativeText: language.no, onAccept: (v) async {
+            //         widget.onCall!();
+            //         await Future.delayed(Duration(milliseconds: 500));
+            //         await logout();
+            //       });
+            //     }),
           ],
         ),
       ),

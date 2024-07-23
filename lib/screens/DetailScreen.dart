@@ -74,7 +74,9 @@ class DetailScreenState extends State<DetailScreen> {
     log(req);
     await savePayment(req).then((value) {
       appStore.setLoading(false);
-      launchScreen(context, DashboardScreen(), isNewTask: true, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+      launchScreen(context, DashboardScreen(),
+          isNewTask: true,
+          pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
     }).catchError((error) {
       appStore.setLoading(false);
       log(error.toString());
@@ -83,7 +85,8 @@ class DetailScreenState extends State<DetailScreen> {
 
   Future<void> orderDetailApi() async {
     appStore.setLoading(true);
-    await rideDetail(orderId: currentData!.payment!.rideRequestId).then((value) {
+    await rideDetail(orderId: currentData!.payment!.rideRequestId)
+        .then((value) {
       appStore.setLoading(false);
 
       riderModel = value.data;
@@ -123,12 +126,17 @@ class DetailScreenState extends State<DetailScreen> {
       debugPrint('connected');
     }
 
-    client.subscribe(mMQTT_UNIQUE_TOPIC_NAME + 'ride_request_status_' + sharedPref.getInt(USER_ID).toString(), MqttQos.atLeastOnce);
+    client.subscribe(
+        mMQTT_UNIQUE_TOPIC_NAME +
+            'ride_request_status_' +
+            sharedPref.getInt(USER_ID).toString(),
+        MqttQos.atLeastOnce);
 
     client.updates!.listen((List<MqttReceivedMessage<MqttMessage?>>? c) {
       final MqttPublishMessage recMess = c![0].payload as MqttPublishMessage;
 
-      final pt = MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+      final pt =
+          MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
 
       if (jsonDecode(pt)['success_type'] == 'rating') {
         currentRideRequest();
@@ -170,7 +178,8 @@ class DetailScreenState extends State<DetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(language.detailScreen, style: boldTextStyle(color: Colors.white)),
+        title: Text(language.detailScreen,
+            style: boldTextStyle(color: Colors.white)),
       ),
       body: currentData != null && riderModel != null
           ? Stack(
@@ -181,8 +190,10 @@ class DetailScreenState extends State<DetailScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       addressComponent(),
-                      if (riderModel!.otherRiderData != null) SizedBox(height: 12),
-                      if (riderModel!.otherRiderData != null) riderDataComponent(),
+                      if (riderModel!.otherRiderData != null)
+                        SizedBox(height: 12),
+                      if (riderModel!.otherRiderData != null)
+                        riderDataComponent(),
                       SizedBox(height: 12),
                       paymentDetail(),
                       SizedBox(height: 12),
@@ -190,7 +201,11 @@ class DetailScreenState extends State<DetailScreen> {
                     ],
                   ),
                 ),
-                Visibility(visible: isPaymentDone, child: Center(child: Lottie.asset(paymentSuccessful, width: 400, height: 400, fit: BoxFit.contain))),
+                Visibility(
+                    visible: isPaymentDone,
+                    child: Center(
+                        child: Lottie.asset(paymentSuccessful,
+                            width: 400, height: 400, fit: BoxFit.contain))),
               ],
             )
           : Observer(builder: (context) {
@@ -223,9 +238,12 @@ class DetailScreenState extends State<DetailScreen> {
                       color: primaryColor,
                       onTap: () {
                         if (currentData!.payment!.paymentStatus == COMPLETED) {
-                          launchScreen(context, DashboardScreen(), isNewTask: true, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+                          launchScreen(context, DashboardScreen(),
+                              isNewTask: true,
+                              pageRouteAnimation:
+                                  PageRouteAnimation.SlideBottomTop);
                         } else {
-                          //currentRideRequest();
+                          currentRideRequest();
                           toast(language.waitingForDriverConformation);
                         }
                       },
@@ -237,7 +255,10 @@ class DetailScreenState extends State<DetailScreen> {
 
   Widget addressComponent() {
     return Container(
-      decoration: BoxDecoration(color: Colors.transparent, border: Border.all(color: dividerColor.withOpacity(0.5)), borderRadius: radius()),
+      decoration: BoxDecoration(
+          color: Colors.transparent,
+          border: Border.all(color: dividerColor.withOpacity(0.5)),
+          borderRadius: radius()),
       padding: EdgeInsets.all(12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -248,11 +269,14 @@ class DetailScreenState extends State<DetailScreen> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(Ionicons.calendar, color: textSecondaryColorGlobal, size: 16),
+                  Icon(Ionicons.calendar,
+                      color: textSecondaryColorGlobal, size: 16),
                   SizedBox(width: 4),
                   Padding(
                     padding: EdgeInsets.only(top: 2),
-                    child: Text('${printDate(riderModel!.createdAt.validate())}', style: primaryTextStyle(size: 14)),
+                    child: Text(
+                        '${printDate(riderModel!.createdAt.validate())}',
+                        style: primaryTextStyle(size: 14)),
                   ),
                 ],
               ),
@@ -267,7 +291,9 @@ class DetailScreenState extends State<DetailScreen> {
             ],
           ),
           SizedBox(height: 10),
-          Text('${language.distance}: ${riderModel!.distance!.toStringAsFixed(2)} ${riderModel!.distanceUnit.toString()}', style: boldTextStyle(size: 14)),
+          Text(
+              '${language.distance}: ${riderModel!.distance!.toStringAsFixed(2)} ${riderModel!.distanceUnit.toString()}',
+              style: boldTextStyle(size: 14)),
           SizedBox(height: 10),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -281,9 +307,15 @@ class DetailScreenState extends State<DetailScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        if (riderModel!.startTime != null) Text(riderModel!.startTime != null ? printDate(riderModel!.startTime!) : '', style: secondaryTextStyle(size: 12)),
+                        if (riderModel!.startTime != null)
+                          Text(
+                              riderModel!.startTime != null
+                                  ? printDate(riderModel!.startTime!)
+                                  : '',
+                              style: secondaryTextStyle(size: 12)),
                         if (riderModel!.startTime != null) SizedBox(height: 4),
-                        Text(riderModel!.startAddress.validate(), style: primaryTextStyle(size: 14)),
+                        Text(riderModel!.startAddress.validate(),
+                            style: primaryTextStyle(size: 14)),
                       ],
                     ),
                   ),
@@ -312,9 +344,15 @@ class DetailScreenState extends State<DetailScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        if (riderModel!.endTime != null) Text(riderModel!.endTime != null ? printDate(riderModel!.endTime!) : '', style: secondaryTextStyle(size: 12)),
+                        if (riderModel!.endTime != null)
+                          Text(
+                              riderModel!.endTime != null
+                                  ? printDate(riderModel!.endTime!)
+                                  : '',
+                              style: secondaryTextStyle(size: 12)),
                         if (riderModel!.endTime != null) SizedBox(height: 4),
-                        Text(riderModel!.endAddress.validate(), style: primaryTextStyle(size: 14)),
+                        Text(riderModel!.endAddress.validate(),
+                            style: primaryTextStyle(size: 14)),
                       ],
                     ),
                   ),
@@ -325,7 +363,8 @@ class DetailScreenState extends State<DetailScreen> {
           SizedBox(height: 16),
           inkWellWidget(
             onTap: () {
-              launchScreen(context, RideHistoryScreen(rideHistory: rideHistory), pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+              launchScreen(context, RideHistoryScreen(rideHistory: rideHistory),
+                  pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -358,7 +397,8 @@ class DetailScreenState extends State<DetailScreen> {
     return Container(
       decoration: BoxDecoration(
         color: Colors.transparent,
-        border: Border.all(color: dividerColor.withOpacity(0.5).withOpacity(0.5)),
+        border:
+            Border.all(color: dividerColor.withOpacity(0.5).withOpacity(0.5)),
         borderRadius: radius(),
       ),
       padding: EdgeInsets.all(12),
@@ -371,7 +411,8 @@ class DetailScreenState extends State<DetailScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(language.via, style: primaryTextStyle()),
-              Text(paymentStatus(riderModel!.paymentType.validate()), style: boldTextStyle()),
+              Text(paymentStatus(riderModel!.paymentType.validate()),
+                  style: boldTextStyle()),
             ],
           ),
           SizedBox(height: 12),
@@ -379,7 +420,10 @@ class DetailScreenState extends State<DetailScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(language.status, style: primaryTextStyle()),
-              Text(paymentStatus(riderModel!.paymentStatus.validate()), style: boldTextStyle(color: paymentStatusColor(riderModel!.paymentStatus.validate()))),
+              Text(paymentStatus(riderModel!.paymentStatus.validate()),
+                  style: boldTextStyle(
+                      color: paymentStatusColor(
+                          riderModel!.paymentStatus.validate()))),
             ],
           ),
         ],
@@ -391,7 +435,8 @@ class DetailScreenState extends State<DetailScreen> {
     return Container(
       decoration: BoxDecoration(
         color: Colors.transparent,
-        border: Border.all(color: dividerColor.withOpacity(0.5).withOpacity(0.5)),
+        border:
+            Border.all(color: dividerColor.withOpacity(0.5).withOpacity(0.5)),
         borderRadius: radius(),
       ),
       padding: EdgeInsets.all(12),
@@ -401,16 +446,25 @@ class DetailScreenState extends State<DetailScreen> {
           Text(language.priceDetail, style: boldTextStyle(size: 16)),
           SizedBox(height: 12),
           riderModel!.subtotal! <= riderModel!.minimumFare!
-              ? totalCount(title: language.minimumFees, amount: riderModel!.minimumFare)
+              ? totalCount(
+                  title: language.minimumFees, amount: riderModel!.minimumFare)
               : Column(
                   children: [
-                    totalCount(title: language.basePrice, amount: riderModel!.baseFare),
+                    totalCount(
+                        title: language.basePrice,
+                        amount: riderModel!.baseFare),
                     SizedBox(height: 8),
-                    totalCount(title:language.distancePrice, amount: riderModel!.perDistanceCharge),
+                    totalCount(
+                        title: language.distancePrice,
+                        amount: riderModel!.perDistanceCharge),
                     SizedBox(height: 8),
-                    totalCount(title:language.minutePrice, amount: riderModel!.perMinuteDriveCharge),
+                    totalCount(
+                        title: language.minutePrice,
+                        amount: riderModel!.perMinuteDriveCharge),
                     SizedBox(height: 8),
-                    totalCount(title:language.waitingTimePrice, amount: riderModel!.perMinuteWaitingCharge),
+                    totalCount(
+                        title: language.waitingTimePrice,
+                        amount: riderModel!.perMinuteWaitingCharge),
                   ],
                 ),
           SizedBox(height: 8),
@@ -420,13 +474,17 @@ class DetailScreenState extends State<DetailScreen> {
               children: [
                 Text(language.couponDiscount, style: secondaryTextStyle()),
                 Text(
-                  "- " + printAmount(riderModel!.couponDiscount!.toStringAsFixed(digitAfterDecimal)),
+                  "- " +
+                      printAmount(riderModel!.couponDiscount!
+                          .toStringAsFixed(digitAfterDecimal)),
                   style: boldTextStyle(color: Colors.green, size: 14),
                 ),
               ],
             ),
-          if (riderModel!.couponData != null && riderModel!.couponDiscount != 0)  SizedBox(height: 8),
-          if (riderModel!.tips != null) totalCount(title: language.tips, amount: riderModel!.tips),
+          if (riderModel!.couponData != null && riderModel!.couponDiscount != 0)
+            SizedBox(height: 8),
+          if (riderModel!.tips != null)
+            totalCount(title: language.tips, amount: riderModel!.tips),
           if (riderModel!.tips != null) SizedBox(height: 8),
           if (riderModel!.extraCharges!.isNotEmpty)
             Column(
@@ -439,19 +497,28 @@ class DetailScreenState extends State<DetailScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(e.key.validate().capitalizeFirstLetter(), style: secondaryTextStyle()),
-                        Text(printAmount(e.value!.toStringAsFixed(digitAfterDecimal)), style: boldTextStyle(size: 14)),
+                        Text(e.key.validate().capitalizeFirstLetter(),
+                            style: secondaryTextStyle()),
+                        Text(
+                            printAmount(
+                                e.value!.toStringAsFixed(digitAfterDecimal)),
+                            style: boldTextStyle(size: 14)),
                       ],
                     ),
                   );
                 }).toList()
               ],
             ),
-
           Divider(height: 16, thickness: 1),
           riderModel!.tips != null
-              ? totalCount(title: language.total, amount: riderModel!.subtotal! + riderModel!.tips!, isTotal: true)
-              : totalCount(title: language.total, amount: riderModel!.subtotal, isTotal: true),
+              ? totalCount(
+                  title: language.total,
+                  amount: riderModel!.subtotal! + riderModel!.tips!,
+                  isTotal: true)
+              : totalCount(
+                  title: language.total,
+                  amount: riderModel!.subtotal,
+                  isTotal: true),
         ],
       ),
     );
@@ -466,30 +533,41 @@ class DetailScreenState extends State<DetailScreen> {
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
             color: Colors.transparent,
-            border: Border.all(color: dividerColor.withOpacity(0.5).withOpacity(0.5)),
+            border: Border.all(
+                color: dividerColor.withOpacity(0.5).withOpacity(0.5)),
             borderRadius: radius(),
           ),
           padding: EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(language.riderInformation.capitalizeFirstLetter(), style: boldTextStyle()),
+              Text(language.riderInformation.capitalizeFirstLetter(),
+                  style: boldTextStyle()),
               SizedBox(height: 12),
               Row(
                 children: [
                   Icon(Ionicons.person_outline, size: 18),
                   SizedBox(width: 8),
-                  Text(riderModel!.otherRiderData!.name.validate(), style: primaryTextStyle()),
+                  Text(riderModel!.otherRiderData!.name.validate(),
+                      style: primaryTextStyle()),
                 ],
               ),
               SizedBox(height: 10),
               InkWell(
                 onTap: () {
-                  launchUrl(Uri.parse('tel:${riderModel!.otherRiderData!.conatctNumber.validate()}'), mode: LaunchMode.externalApplication);
+                  launchUrl(
+                      Uri.parse(
+                          'tel:${riderModel!.otherRiderData!.conatctNumber.validate()}'),
+                      mode: LaunchMode.externalApplication);
                 },
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [Icon(Icons.call_sharp, size: 18, color: Colors.green), SizedBox(width: 8), Text(riderModel!.otherRiderData!.conatctNumber.validate(), style: primaryTextStyle())],
+                  children: [
+                    Icon(Icons.call_sharp, size: 18, color: Colors.green),
+                    SizedBox(width: 8),
+                    Text(riderModel!.otherRiderData!.conatctNumber.validate(),
+                        style: primaryTextStyle())
+                  ],
                 ),
               ),
             ],
