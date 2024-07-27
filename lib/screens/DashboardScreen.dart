@@ -39,6 +39,7 @@ import '../utils/Extensions/app_common.dart';
 import '../utils/Images.dart';
 import 'LocationPermissionScreen.dart';
 import 'NotificationScreen.dart';
+import '../components/BottomSheetWidget.dart';
 
 class DashboardScreen extends StatefulWidget {
   @override
@@ -560,18 +561,22 @@ class DashboardScreenState extends State<DashboardScreen> {
   }
 
   mqttForUser() async {
-    client.setProtocolV311();
+    // client.setProtocolV311();
     client.logging(on: true);
     client.keepAlivePeriod = 120;
     client.autoReconnect = true;
+    client.secure = true;
 
     try {
-      await client.connect();
+      debugPrint("rehman");
+      await client.connect('oncab_driver', '0nC@b_Driv3r');
+      // await client.connect();
+      debugPrint("rehman2");
     } on NoConnectionException catch (e) {
       debugPrint(e.toString());
       client.connect();
     }
-
+    debugPrint("rehman3");
     if (client.connectionStatus!.state == MqttConnectionState.connected) {
       client.onSubscribed = onSubscribed;
 
@@ -1333,7 +1338,7 @@ class DashboardScreenState extends State<DashboardScreen> {
     return Positioned(
       left: 0,
       right: 0,
-      bottom: 40,
+      bottom: 100,
       child: FlutterSwitch(
         value: isOffLine,
         width: 90,

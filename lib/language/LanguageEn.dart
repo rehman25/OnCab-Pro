@@ -264,7 +264,7 @@ class LanguageEn extends BaseLanguage {
   String get sendOTP => 'Send OTP';
 
   @override
-  String get carModel => 'Car Model';
+  String get carModel => 'Vehicle Model';
 
   @override
   String get sos => 'SOS';
@@ -397,13 +397,13 @@ class LanguageEn extends BaseLanguage {
   String get selectService => 'Select Service';
 
   @override
-  String get carColor => 'Car Color';
+  String get carColor => 'Vehicle Color';
 
   @override
-  String get carPlateNumber => 'Car Plate Number';
+  String get carPlateNumber => 'Vehicle Plate Number';
 
   @override
-  String get carProductionYear => 'Car Production Year';
+  String get carProductionYear => 'Vehicle Production Year';
 
   @override
   String get withDraw => 'Withdraw';
