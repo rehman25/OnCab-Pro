@@ -17,7 +17,8 @@ class NotificationScreen extends StatefulWidget {
   NotificationScreenState createState() => NotificationScreenState();
 }
 
-class NotificationScreenState extends State<NotificationScreen> with TickerProviderStateMixin {
+class NotificationScreenState extends State<NotificationScreen>
+    with TickerProviderStateMixin {
   ScrollController scrollController = ScrollController();
   int currentPage = 1;
 
@@ -29,7 +30,8 @@ class NotificationScreenState extends State<NotificationScreen> with TickerProvi
     super.initState();
     init();
     scrollController.addListener(() {
-      if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
+      if (scrollController.position.pixels ==
+          scrollController.position.maxScrollExtent) {
         if (!mIsLastPage) {
           appStore.setLoading(true);
 
@@ -46,7 +48,7 @@ class NotificationScreenState extends State<NotificationScreen> with TickerProvi
   void init() async {
     getNotification(page: currentPage).then((value) {
       appStore.setLoading(false);
-      //appStore.setAllUnreadCount(value.allUnreadCount.validate());
+      // appStore.setAllUnreadCount(value.allUnreadCount.validate());
       mIsLastPage = value.notificationData!.length < currentPage;
       if (currentPage == 1) {
         notificationData.clear();
@@ -68,68 +70,82 @@ class NotificationScreenState extends State<NotificationScreen> with TickerProvi
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(language.notification, style: boldTextStyle(color: Colors.white)),
+        title: Text(language.notification,
+            style: boldTextStyle(color: Colors.white)),
       ),
       body: Observer(builder: (context) {
         return Stack(
           children: [
-            if (notificationData.isNotEmpty) ListView.separated(
-                    controller: scrollController,
-                    padding: EdgeInsets.zero,
-                    itemCount: notificationData.length,
-                    itemBuilder: (_, index) {
-                      NotificationData data = notificationData[index];
-                      return inkWellWidget(
-                        onTap: () {
-                          if (data.data!.type == COMPLAIN_COMMENT) {
-                            launchScreen(context, ComplaintListScreen(complaint: data.data!.complaintId!));
-                          } else if (data.data!.subject! == 'Completed') {
-                            launchScreen(context, RideDetailScreen(orderId: data.data!.id!));
-                          }
-                        },
-                        child: Container(
-                          padding: EdgeInsets.all(12),
-                          child: Row(
-                            children: [
-                              Container(
-                                height: 50,
-                                width: 50,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: primaryColor.withOpacity(0.15),
-                                ),
-                                child: ImageIcon(AssetImage(statusTypeIcon(type: data.data!.type)), color: primaryColor, size: 26),
-                              ),
-                              SizedBox(width: 16),
-                              Expanded(
-                                child: Column(
+            if (notificationData.isNotEmpty)
+              ListView.separated(
+                controller: scrollController,
+                padding: EdgeInsets.zero,
+                itemCount: notificationData.length,
+                itemBuilder: (_, index) {
+                  NotificationData data = notificationData[index];
+                  return inkWellWidget(
+                    onTap: () {
+                      if (data.data!.type == COMPLAIN_COMMENT) {
+                        launchScreen(
+                            context,
+                            ComplaintListScreen(
+                                complaint: data.data!.complaintId!));
+                      } else if (data.data!.subject! == 'Completed') {
+                        launchScreen(
+                            context, RideDetailScreen(orderId: data.data!.id!));
+                      }
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(12),
+                      child: Row(
+                        children: [
+                          Container(
+                            height: 50,
+                            width: 50,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: primaryColor.withOpacity(0.15),
+                            ),
+                            child: ImageIcon(
+                                AssetImage(
+                                    statusTypeIcon(type: data.data!.type)),
+                                color: primaryColor,
+                                size: 26),
+                          ),
+                          SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Row(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Expanded(child: Text('${data.data!.subject}', style: boldTextStyle())),
-                                        SizedBox(width: 8),
-                                        Text(data.createdAt.validate(), style: secondaryTextStyle()),
-                                      ],
-                                    ),
-                                    SizedBox(height: 8),
-                                    Text('${data.data!.message}', style: primaryTextStyle(size: 14)),
+                                    Expanded(
+                                        child: Text('${data.data!.subject}',
+                                            style: boldTextStyle())),
+                                    SizedBox(width: 8),
+                                    Text(data.createdAt.validate(),
+                                        style: secondaryTextStyle()),
                                   ],
                                 ),
-                              ),
-                            ],
+                                SizedBox(height: 8),
+                                Text('${data.data!.message}',
+                                    style: primaryTextStyle(size: 14)),
+                              ],
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                    separatorBuilder: (context, index) {
-                      return Divider();
-                    },
-                  ) else !appStore.isLoading
-                    ? emptyWidget()
-                    : SizedBox(),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+                separatorBuilder: (context, index) {
+                  return Divider();
+                },
+              )
+            else
+              !appStore.isLoading ? emptyWidget() : SizedBox(),
             Visibility(visible: appStore.isLoading, child: loaderWidget()),
           ],
         );

@@ -608,8 +608,8 @@ class DashboardScreenState extends State<DashboardScreen> {
             'ride_request_status_' +
             sharedPref.getInt(USER_ID).toString(),
         MqttQos.atLeastOnce);
-
     client.updates!.listen((List<MqttReceivedMessage<MqttMessage?>>? c) async {
+      debugPrint('${c} listeningasd');
       final MqttPublishMessage recMess = c![0].payload as MqttPublishMessage;
 
       final pt =
@@ -625,6 +625,7 @@ class DashboardScreenState extends State<DashboardScreen> {
           asAlarm: false,
         );
         servicesListData = OnRideRequest.fromJson(jsonDecode(pt)['result']);
+        debugPrint('${servicesListData} kkill');
 
         sharedPref.setString(ON_RIDE_MODEL, jsonEncode(servicesListData));
         riderId = servicesListData!.id!;
@@ -661,9 +662,7 @@ class DashboardScreenState extends State<DashboardScreen> {
       Map req = {
         "is_available": 1,
       };
-      updateStatus(req).then((value) {
-        //
-      });
+      updateStatus(req).then((value) {});
     } else {
       Map req = {
         "is_available": 0,
@@ -862,7 +861,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                                                               style: boldTextStyle(
                                                                   color: Colors
                                                                       .white)),
-                                                        )
+                                                        ),
                                                       ],
                                                     ),
                                                     SizedBox(height: 12),
@@ -1238,6 +1237,63 @@ class DashboardScreenState extends State<DashboardScreen> {
               visible: appStore.isLoading,
               child: loaderWidget(),
             ),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Color(0xFF0e2345),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(16),
+                    topRight: Radius.circular(16),
+                  ),
+                ),
+                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: 325,
+                      decoration: BoxDecoration(
+                        color: Color(0xFFFFFFFF),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(16),
+                          bottomLeft: Radius.circular(16),
+                          bottomRight: Radius.circular(16),
+                          topRight: Radius.circular(16),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color.fromARGB(255, 49, 49, 49)
+                                .withOpacity(0.5),
+                            spreadRadius: 2,
+                            blurRadius: 7,
+                            offset: Offset(0, 1), // changes position of shadow
+                          ),
+                        ],
+                      ),
+                      padding: EdgeInsets.all(8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Image.asset(
+                            ic_green_car,
+                            width: 75,
+                            height: 50,
+                          ),
+                          SizedBox(height: 8),
+                          Text(
+                            'Waiting for the ride...',
+                            style: primaryTextStyle(color: Colors.black),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -1338,7 +1394,7 @@ class DashboardScreenState extends State<DashboardScreen> {
     return Positioned(
       left: 0,
       right: 0,
-      bottom: 100,
+      bottom: 125,
       child: FlutterSwitch(
         value: isOffLine,
         width: 90,
