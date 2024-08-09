@@ -8,7 +8,7 @@ const mAppName = 'oncabdriver';
 
 //region DomainUrl
 const DOMAIN_URL =
-    'https://Oncab.alitacode.com'; // Don't add slash at the end of the url
+    'https://Admin.oncabglobal.com'; // Don't add slash at the end of the url
 //endregion
 
 //region Google map key
