@@ -1241,58 +1241,196 @@ class DashboardScreenState extends State<DashboardScreen> {
               bottom: 0,
               left: 0,
               right: 0,
+
               child: Container(
+                // color: Color(0xFFEAEAEA),
                 decoration: BoxDecoration(
-                  color: Color(0xFF0e2345),
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(16),
-                    topRight: Radius.circular(16),
-                  ),
+                      topLeft: radiusCircular(12),
+                      topRight: radiusCircular(12)),
                 ),
-                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                padding: EdgeInsets.all(5.0),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
-                      width: 325,
-                      decoration: BoxDecoration(
-                        color: Color(0xFFFFFFFF),
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(16),
-                          bottomLeft: Radius.circular(16),
-                          bottomRight: Radius.circular(16),
-                          topRight: Radius.circular(16),
+                    Expanded(
+                      child: Container(
+                        height: 100,
+                        padding: EdgeInsets.all(2.0),
+                        // color: Colors.green[50],
+                        decoration: BoxDecoration(
+                          color: Colors.red[50],
+                          borderRadius: BorderRadius.circular(
+                              15), // Add border radius here
+                          // boxShadow: [
+                          //   BoxShadow(
+                          //     color: Colors.black12,
+                          //     spreadRadius: 5,
+                          //     blurRadius: 10,
+                          //     offset: Offset(0, 3), // changes position of shadow
+                          //   ),
+                          // ],
                         ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Color.fromARGB(255, 49, 49, 49)
-                                .withOpacity(0.5),
-                            spreadRadius: 2,
-                            blurRadius: 7,
-                            offset: Offset(0, 1), // changes position of shadow
-                          ),
-                        ],
+                        child: Container(
+                            padding: EdgeInsets.all(5.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment
+                                  .start, // Align children in the center vertically
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(
+                                      top: 5.0), // Add right margin to the icon
+                                  child: Icon(
+                                    Icons.info,
+                                    size: 20,
+                                  ),
+                                ),
+                                Text(
+                                  "Pro",
+                                  style: TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            )),
                       ),
-                      padding: EdgeInsets.all(8),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Image.asset(
-                            ic_green_car,
-                            width: 75,
-                            height: 50,
+                    ),
+                    SizedBox(width: 8),
+                    Expanded(
+                      child: Container(
+                        height: 100,
+                        padding: EdgeInsets.all(2.0),
+                        decoration: BoxDecoration(
+                          color: Colors.blue[50],
+                          borderRadius: BorderRadius.circular(
+                              15), // Add border radius here
+                          // boxShadow: [
+                          //   BoxShadow(
+                          //     color: Colors.black12,
+                          //     spreadRadius: 5,
+                          //     blurRadius: 10,
+                          //     offset: Offset(0, 3), // changes position of shadow
+                          //   ),
+                          // ],
+                        ),
+                        child: Container(
+                          child: Column(
+                            children: [
+                              Container(
+                                margin: EdgeInsets.only(top: 4.0),
+                                padding: EdgeInsets.only(left: 5.0),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.wallet,
+                                      size: 20,
+                                    ),
+                                    SizedBox(width: 2),
+                                    Text(
+                                      "Earnings",
+                                      style: TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                padding: EdgeInsets.only(right: 10.0, top: 20),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Container(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          SizedBox(width: 2),
+                                          Text(
+                                            "Trips 1",
+                                            style: TextStyle(
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          Text(
+                                            "Rs:5000",
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              )
+                            ],
                           ),
-                          SizedBox(height: 8),
-                          Text(
-                            'Waiting for the ride...',
-                            style: primaryTextStyle(color: Colors.black),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
                   ],
                 ),
               ),
+              // child: Container(
+              //   decoration: BoxDecoration(
+              //     color: Color(0xFF0e2345),
+              //     borderRadius: BorderRadius.only(
+              //       topLeft: Radius.circular(16),
+              //       topRight: Radius.circular(16),
+              //     ),
+              //   ),
+              //   padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //     children: [
+              //       Container(
+              //         width: 325,
+              //         decoration: BoxDecoration(
+              //           color: Color(0xFFFFFFFF),
+              //           borderRadius: BorderRadius.only(
+              //             topLeft: Radius.circular(16),
+              //             bottomLeft: Radius.circular(16),
+              //             bottomRight: Radius.circular(16),
+              //             topRight: Radius.circular(16),
+              //           ),
+              //           boxShadow: [
+              //             BoxShadow(
+              //               color: Color.fromARGB(255, 49, 49, 49)
+              //                   .withOpacity(0.5),
+              //               spreadRadius: 2,
+              //               blurRadius: 7,
+              //               offset: Offset(0, 1), // changes position of shadow
+              //             ),
+              //           ],
+              //         ),
+              //         padding: EdgeInsets.all(8),
+              //         child: Row(
+              //           mainAxisAlignment: MainAxisAlignment.start,
+              //           children: [
+              //             Image.asset(
+              //               ic_green_car,
+              //               width: 75,
+              //               height: 50,
+              //             ),
+              //             SizedBox(height: 8),
+              //             Text(
+              //               'Waiting for the ride...',
+              //               style: primaryTextStyle(color: Colors.black),
+              //             ),
+              //           ],
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
             ),
           ],
         ),
@@ -1394,7 +1532,7 @@ class DashboardScreenState extends State<DashboardScreen> {
     return Positioned(
       left: 0,
       right: 0,
-      bottom: 125,
+      bottom: 110,
       child: FlutterSwitch(
         value: isOffLine,
         width: 90,
@@ -1408,7 +1546,7 @@ class DashboardScreenState extends State<DashboardScreen> {
         activeTextColor: Colors.white,
         inactiveTextColor: Colors.white,
         activeIcon: ImageIcon(AssetImage(ic_green_car),
-            color: Color(0xFF0e2345), size: 40),
+            color: Color(0xFF0e2345), size: 38),
         inactiveIcon:
             ImageIcon(AssetImage(ic_red_car), color: Colors.white, size: 40),
         activeColor: Color(0xFF0e2345),

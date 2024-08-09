@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../main.dart';
 
-Color primaryColor = Color(0xFF0e2345);
+Color primaryColor = Color(0xFF000000);
 Color borderColor = Color(0xFFEAEAEA);
 const scaffoldSecondaryDark = Color(0xFF56657C);
 const scaffoldColorDark = Color(0xFF0e2345);

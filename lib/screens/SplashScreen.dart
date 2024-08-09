@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:taxi_driver/screens/DashboardScreen.dart';
+import 'package:taxi_driver/screens/BottomScreen.dart';
 import 'package:taxi_driver/screens/SignInScreen.dart';
 import 'package:taxi_driver/utils/Extensions/StringExtensions.dart';
 import '../main.dart';
@@ -30,44 +31,58 @@ class SplashScreenState extends State<SplashScreen> {
 
     await Future.delayed(Duration(seconds: 2));
     if (sharedPref.getBool(IS_FIRST_TIME) ?? true) {
-        await Geolocator.requestPermission().then((value) async {
-          await Geolocator.getCurrentPosition().then((value) {
-            sharedPref.setDouble(LATITUDE, value.latitude);
-            sharedPref.setDouble(LONGITUDE, value.longitude);
-            launchScreen(context, WalkThroughScreen(), pageRouteAnimation: PageRouteAnimation.Slide, isNewTask: true);
-          });
-        }).catchError((e) {
-          launchScreen(context, WalkThroughScreen(), pageRouteAnimation: PageRouteAnimation.Slide, isNewTask: true);
+      await Geolocator.requestPermission().then((value) async {
+        await Geolocator.getCurrentPosition().then((value) {
+          sharedPref.setDouble(LATITUDE, value.latitude);
+          sharedPref.setDouble(LONGITUDE, value.longitude);
+          launchScreen(context, WalkThroughScreen(),
+              pageRouteAnimation: PageRouteAnimation.Slide, isNewTask: true);
         });
+      }).catchError((e) {
+        launchScreen(context, WalkThroughScreen(),
+            pageRouteAnimation: PageRouteAnimation.Slide, isNewTask: true);
+      });
     } else {
-      if (sharedPref.getString(CONTACT_NUMBER).validate().isEmptyOrNull && appStore.isLoggedIn) {
-        launchScreen(context, EditProfileScreen(isGoogle: true), isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
-      } else if (sharedPref.getString(UID).validate().isEmptyOrNull && appStore.isLoggedIn) {
+      if (sharedPref.getString(CONTACT_NUMBER).validate().isEmptyOrNull &&
+          appStore.isLoggedIn) {
+        launchScreen(context, EditProfileScreen(isGoogle: true),
+            isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+      } else if (sharedPref.getString(UID).validate().isEmptyOrNull &&
+          appStore.isLoggedIn) {
         updateProfileUid().then((value) {
           if (sharedPref.getInt(IS_Verified_Driver) == 1) {
-            launchScreen(context, DashboardScreen(), isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+            launchScreen(context, BottomScreen(),
+                isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
           } else {
-            launchScreen(context, DocumentsScreen(isShow: true), isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+            launchScreen(context, DocumentsScreen(isShow: true),
+                isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
           }
         });
-      } else if (sharedPref.getInt(IS_Verified_Driver) == 0 && appStore.isLoggedIn) {
-        launchScreen(context, DocumentsScreen(isShow: true), pageRouteAnimation: PageRouteAnimation.Slide, isNewTask: true);
-      } else if (sharedPref.getInt(IS_Verified_Driver) == 1 && appStore.isLoggedIn) {
-        launchScreen(context, DashboardScreen(), pageRouteAnimation: PageRouteAnimation.SlideBottomTop, isNewTask: true);
+      } else if (sharedPref.getInt(IS_Verified_Driver) == 0 &&
+          appStore.isLoggedIn) {
+        launchScreen(context, DocumentsScreen(isShow: true),
+            pageRouteAnimation: PageRouteAnimation.Slide, isNewTask: true);
+      } else if (sharedPref.getInt(IS_Verified_Driver) == 1 &&
+          appStore.isLoggedIn) {
+        launchScreen(context, BottomScreen(),
+            pageRouteAnimation: PageRouteAnimation.SlideBottomTop,
+            isNewTask: true);
       } else {
-        launchScreen(context, SignInScreen(), pageRouteAnimation: PageRouteAnimation.Slide, isNewTask: true);
+        launchScreen(context, SignInScreen(),
+            pageRouteAnimation: PageRouteAnimation.Slide, isNewTask: true);
       }
-
     }
   }
 
   Future<void> driverDetail() async {
     if (appStore.isLoggedIn) {
-      await getUserDetail(userId: sharedPref.getInt(USER_ID)).then((value) async {
+      await getUserDetail(userId: sharedPref.getInt(USER_ID))
+          .then((value) async {
         await sharedPref.setInt(IS_ONLINE, value.data!.isOnline!);
         appStore.isAvailable = value.data!.isAvailable;
         if (value.data!.status == REJECT || value.data!.status == BANNED) {
-          toast('${language.yourAccountIs} ${value.data!.status}. ${language.pleaseContactSystemAdministrator}');
+          toast(
+              '${language.yourAccountIs} ${value.data!.status}. ${language.pleaseContactSystemAdministrator}');
           logout();
         }
       }).catchError((error) {});
@@ -87,9 +102,11 @@ class SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(ic_logo_white, fit: BoxFit.contain, height: 150, width: 150),
+            Image.asset(ic_logo_white,
+                fit: BoxFit.contain, height: 150, width: 150),
             SizedBox(height: 16),
-            Text(language.appName, style: boldTextStyle(color: Colors.white, size: 22)),
+            Text(language.appName,
+                style: boldTextStyle(color: Colors.white, size: 22)),
           ],
         ),
       ),

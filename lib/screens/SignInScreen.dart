@@ -10,6 +10,7 @@ import 'package:taxi_driver/utils/Constants.dart';
 import 'package:taxi_driver/utils/Extensions/StringExtensions.dart';
 import 'package:taxi_driver/utils/Extensions/context_extensions.dart';
 import 'package:taxi_driver/utils/Images.dart';
+import 'package:taxi_driver/screens/BottomScreen.dart';
 
 import '../../main.dart';
 import '../Services/AuthService.dart';
@@ -104,7 +105,7 @@ class SignInScreenState extends State<SignInScreen> {
                   sharedPref.setDouble(LONGITUDE, value.longitude);
                 });
               });
-              launchScreen(context, DashboardScreen(),
+              launchScreen(context, BottomScreen(),
                   isNewTask: true,
                   pageRouteAnimation: PageRouteAnimation.Slide);
             } else {
@@ -133,7 +134,7 @@ class SignInScreenState extends State<SignInScreen> {
                     sharedPref.setDouble(LONGITUDE, value.longitude);
                   });
                 });
-                launchScreen(context, DashboardScreen(),
+                launchScreen(context, BottomScreen(),
                     isNewTask: true,
                     pageRouteAnimation: PageRouteAnimation.Slide);
               } else {
