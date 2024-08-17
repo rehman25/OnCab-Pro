@@ -57,12 +57,15 @@ Future<void> initialize({
   String? defaultLanguage,
 }) async {
   localeLanguageList = aLocaleLanguageList ?? [];
-  selectedLanguageDataModel = getSelectedLanguageModel(defaultLanguage: defaultLanguage);
+  selectedLanguageDataModel =
+      getSelectedLanguageModel(defaultLanguage: defaultLanguage);
 }
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp( options: DefaultFirebaseOptions.currentPlatform,).then((value) {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  ).then((value) {
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
   });
 
@@ -70,10 +73,15 @@ void main() async {
   await initialize(aLocaleLanguageList: languageList());
   appStore.setLanguage(defaultLanguage);
 
-  await appStore.setLoggedIn(sharedPref.getBool(IS_LOGGED_IN) ?? false, isInitializing: true);
-  await appStore.setUserId(sharedPref.getInt(USER_ID) ?? 0, isInitializing: true);
-  await appStore.setUserEmail(sharedPref.getString(USER_EMAIL).validate(), isInitialization: true);
-  await appStore.setUserProfile(sharedPref.getString(USER_PROFILE_PHOTO).validate(), isInitialization: true);
+  await appStore.setLoggedIn(sharedPref.getBool(IS_LOGGED_IN) ?? false,
+      isInitializing: true);
+  await appStore.setUserId(sharedPref.getInt(USER_ID) ?? 0,
+      isInitializing: true);
+  await appStore.setUserEmail(sharedPref.getString(USER_EMAIL).validate(),
+      isInitialization: true);
+  await appStore.setUserProfile(
+      sharedPref.getString(USER_PROFILE_PHOTO).validate(),
+      isInitialization: true);
   oneSignalSettings();
   runApp(MyApp());
 }
@@ -97,7 +105,8 @@ class _MyAppState extends State<MyApp> {
       if (e == ConnectivityResult.none) {
         log('not connected');
         isCurrentlyOnNoInternet = true;
-        launchScreen(navigatorKey.currentState!.overlay!.context, NoInternetScreen());
+        launchScreen(
+            navigatorKey.currentState!.overlay!.context, NoInternetScreen());
       } else {
         if (isCurrentlyOnNoInternet) {
           Navigator.pop(navigatorKey.currentState!.overlay!.context);
@@ -136,7 +145,8 @@ class _MyAppState extends State<MyApp> {
           GlobalCupertinoLocalizations.delegate,
         ],
         localeResolutionCallback: (locale, supportedLocales) => locale,
-        locale: Locale(appStore.selectedLanguage.validate(value: defaultLanguage)),
+        locale:
+            Locale(appStore.selectedLanguage.validate(value: defaultLanguage)),
       );
     });
   }

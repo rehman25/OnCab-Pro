@@ -11,10 +11,10 @@ class AppTheme {
   static final ThemeData lightTheme = ThemeData(
     primarySwatch: createMaterialColor(primaryColor),
     primaryColor: primaryColor,
-    scaffoldBackgroundColor: Colors.white,
-    fontFamily: GoogleFonts.poppins().fontFamily,
+    scaffoldBackgroundColor: Colors.black,
+    fontFamily: GoogleFonts.roboto().fontFamily,
     bottomNavigationBarTheme:
-        BottomNavigationBarThemeData(backgroundColor: Colors.white),
+        BottomNavigationBarThemeData(backgroundColor: Color(0xFFCAA928)),
     iconTheme: IconThemeData(color: scaffoldSecondaryDark),
     textTheme: TextTheme(titleLarge: TextStyle()),
     dialogBackgroundColor: Colors.white,
@@ -45,9 +45,9 @@ class AppTheme {
     primarySwatch: createMaterialColor(primaryColor),
     primaryColor: primaryColor,
     scaffoldBackgroundColor: scaffoldColorDark,
-    fontFamily: GoogleFonts.poppins().fontFamily,
+    fontFamily: GoogleFonts.roboto().fontFamily,
     bottomNavigationBarTheme:
-        BottomNavigationBarThemeData(backgroundColor: scaffoldSecondaryDark),
+        BottomNavigationBarThemeData(backgroundColor: Color(0xFFCAA928)),
     iconTheme: IconThemeData(color: Colors.white),
     textTheme: TextTheme(titleLarge: TextStyle(color: textSecondaryColor)),
     dialogBackgroundColor: scaffoldSecondaryDark,

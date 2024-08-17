@@ -105,12 +105,12 @@ class NotificationScreenState extends State<NotificationScreen>
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: primaryColor.withOpacity(0.15),
+                              color: textPrimaryColor.withOpacity(0.15),
                             ),
                             child: ImageIcon(
                                 AssetImage(
                                     statusTypeIcon(type: data.data!.type)),
-                                color: primaryColor,
+                                color: textPrimaryColor,
                                 size: 26),
                           ),
                           SizedBox(width: 16),

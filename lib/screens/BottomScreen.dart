@@ -46,8 +46,9 @@ class _BottomScreenState extends State<BottomScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Colors
-            .white, // Set the background color of the entire screen to white
+        color: Color(0xFFCAA928),
+
+        // Set the background color of the entire screen to white
         child: Center(
           child: _widgetOptions.elementAt(_selectedIndex),
         ),
@@ -185,17 +186,21 @@ class _BottomScreenState extends State<BottomScreen> {
           //   ),
           // ),
           Container(
-            height: 65, // Set the desired height
+            height: 70, // Set the desired height
             decoration: BoxDecoration(
-              color: Colors.white,
-              // boxShadow: [
-              //   BoxShadow(
-              //     color: Colors.black12,
-              //     spreadRadius: 5,
-              //     blurRadius: 10,
-              //     offset: Offset(0, 3), // changes position of shadow
-              //   ),
-              // ],
+              // borderRadius: BorderRadius.only(
+              //   topLeft: Radius.elliptical(10, 10),
+              //   topRight: Radius.circular(10),
+              // ),
+              // color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black12,
+                  spreadRadius: 5,
+                  blurRadius: 10,
+                  offset: Offset(0, 3), // changes position of shadow
+                ),
+              ],
             ),
             child: BottomNavigationBar(
               items: const <BottomNavigationBarItem>[
@@ -208,15 +213,19 @@ class _BottomScreenState extends State<BottomScreen> {
                   label: 'Home',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.car_rental),
+                  icon: Icon(
+                    Icons.car_rental,
+                    size: 30,
+                  ),
                   label: 'Rides',
                 ),
               ],
               currentIndex: _selectedIndex,
-              selectedItemColor: Color(0xFF0e2345),
-              unselectedItemColor: Colors.grey,
-              selectedIconTheme: IconThemeData(color: Color(0xFF0e2345)),
-              unselectedIconTheme: IconThemeData(color: Colors.grey),
+              selectedItemColor: Color(0xFF000000),
+              unselectedItemColor: Color.fromARGB(231, 196, 195, 195),
+              selectedIconTheme: IconThemeData(color: Color(0xFF000000)),
+              unselectedIconTheme:
+                  IconThemeData(color: Color.fromARGB(231, 196, 195, 195)),
               onTap: _onItemTapped,
             ),
           ),

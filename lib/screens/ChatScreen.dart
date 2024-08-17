@@ -49,7 +49,8 @@ class _ChatScreenState extends State<ChatScreen> {
     // mSelectedImage = sharedPref.getString(SELECTED_WALLPAPER).validate();
 
     chatMessageService = ChatMessageService();
-    chatMessageService.setUnReadStatusToTrue(senderId: sender.uid!, receiverId: widget.userData!.uid!);
+    chatMessageService.setUnReadStatusToTrue(
+        senderId: sender.uid!, receiverId: widget.userData!.uid!);
     setState(() {});
   }
 
@@ -80,7 +81,11 @@ class _ChatScreenState extends State<ChatScreen> {
       data.messageType = MessageType.TEXT.name;
     }
 
-    notificationService.sendPushNotifications(sharedPref.getString(USER_NAME)!, messageCont.text, receiverPlayerId: widget.userData!.playerId).catchError(log);
+    notificationService
+        .sendPushNotifications(
+            sharedPref.getString(USER_NAME)!, messageCont.text,
+            receiverPlayerId: widget.userData!.playerId)
+        .catchError(log);
     messageCont.clear();
     setState(() {});
     return await chatMessageService.addMessage(data).then((value) async {
@@ -109,7 +114,9 @@ class _ChatScreenState extends State<ChatScreen> {
           .doc(sharedPref.getInt(USER_ID).toString())
           .collection(CONTACT_COLLECTION)
           .doc(widget.userData!.uid)
-          .update({'lastMessageTime': DateTime.now().millisecondsSinceEpoch}).catchError((e) {
+          .update({
+        'lastMessageTime': DateTime.now().millisecondsSinceEpoch
+      }).catchError((e) {
         log(e);
       });
       userService.fireStore
@@ -117,7 +124,9 @@ class _ChatScreenState extends State<ChatScreen> {
           .doc(widget.userData!.uid)
           .collection(CONTACT_COLLECTION)
           .doc(sharedPref.getInt(USER_ID).toString())
-          .update({'lastMessageTime': DateTime.now().millisecondsSinceEpoch}).catchError((e) {
+          .update({
+        'lastMessageTime': DateTime.now().millisecondsSinceEpoch
+      }).catchError((e) {
         log(e);
       });
     });
@@ -142,11 +151,15 @@ class _ChatScreenState extends State<ChatScreen> {
             SizedBox(width: 8),
             ClipRRect(
                 borderRadius: BorderRadius.all(radiusCircular(20)),
-                child: commonCachedNetworkImage(widget.userData!.profileImage.validate(),height: 40,width: 40)),
+                child: commonCachedNetworkImage(
+                    widget.userData!.profileImage.validate(),
+                    height: 40,
+                    width: 40)),
             SizedBox(width: 8),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 16),
-              child: Text(widget.userData!.username.validate(), style: TextStyle(color: Colors.white)),
+              child: Text(widget.userData!.username.validate(),
+                  style: TextStyle(color: Colors.white)),
             ),
           ],
         ),
@@ -163,13 +176,16 @@ class _ChatScreenState extends State<ChatScreen> {
               isLive: true,
               padding: EdgeInsets.only(left: 8, top: 8, right: 8, bottom: 0),
               physics: BouncingScrollPhysics(),
-              query: chatMessageService.chatMessagesWithPagination(currentUserId: sharedPref.getString(UID), receiverUserId: widget.userData!.uid!),
+              query: chatMessageService.chatMessagesWithPagination(
+                  currentUserId: sharedPref.getString(UID),
+                  receiverUserId: widget.userData!.uid!),
               itemsPerPage: PER_PAGE_CHAT_COUNT,
               shrinkWrap: true,
               onEmpty: Offstage(),
               itemBuilderType: PaginateBuilderType.listView,
               itemBuilder: (context, snap, index) {
-                ChatMessageModel data = ChatMessageModel.fromJson(snap[index].data() as Map<String, dynamic>);
+                ChatMessageModel data = ChatMessageModel.fromJson(
+                    snap[index].data() as Map<String, dynamic>);
                 data.isMe = data.senderId == sender.uid;
                 return ChatItemWidget(data: data);
               },
@@ -202,13 +218,16 @@ class _ChatScreenState extends State<ChatScreen> {
                         hintStyle: secondaryTextStyle(),
                         contentPadding: EdgeInsets.symmetric(horizontal: 8),
                       ),
-                      cursorColor: appStore.isDarkMode ? Colors.white : Colors.black,
+                      cursorColor:
+                          appStore.isDarkMode ? Colors.white : Colors.black,
                       focusNode: messageFocus,
                       textCapitalization: TextCapitalization.sentences,
                       keyboardType: TextInputType.multiline,
                       minLines: 1,
                       style: primaryTextStyle(),
-                      textInputAction: mIsEnterKey ? TextInputAction.send : TextInputAction.newline,
+                      textInputAction: mIsEnterKey
+                          ? TextInputAction.send
+                          : TextInputAction.newline,
                       onSubmitted: (s) {
                         sendMessage();
                       },
@@ -216,7 +235,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                   ),
                   inkWellWidget(
-                    child: Icon(Icons.send, color: primaryColor,size: 25),
+                    child: Icon(Icons.send, color: primaryColor, size: 25),
                     onTap: () {
                       sendMessage();
                     },

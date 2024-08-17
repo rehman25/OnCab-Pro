@@ -34,7 +34,7 @@ class _DrawerComponentState extends State<DrawerComponent> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: Color(0xFF0e2345),
+      backgroundColor: Color(0xFF000000),
       child: SingleChildScrollView(
         padding: EdgeInsets.all(16),
         child: Column(
@@ -69,10 +69,11 @@ class _DrawerComponentState extends State<DrawerComponent> {
                                       .getString(LAST_NAME)
                                       .validate()
                                       .capitalizeFirstLetter(),
-                              style: boldTextStyle(color: Colors.white)),
+                              style: boldTextStyle(color: Color(0xFFCAA928))),
                           SizedBox(height: 4),
                           Text(appStore.userEmail,
-                              style: secondaryTextStyle(color: Colors.white)),
+                              style:
+                                  secondaryTextStyle(color: Color(0xFFCAA928))),
                         ],
                       ),
                     ),
@@ -143,15 +144,15 @@ class _DrawerComponentState extends State<DrawerComponent> {
                   launchScreen(context, DocumentsScreen(),
                       pageRouteAnimation: PageRouteAnimation.Slide);
                 }),
-            DrawerWidget(
-                title: language.bankInfo,
-                iconData: ic_update_bank_info,
-                icon: MaterialCommunityIcons.bank_outline,
-                onTap: () {
-                  Navigator.pop(context);
-                  launchScreen(context, BankInfoScreen(),
-                      pageRouteAnimation: PageRouteAnimation.Slide);
-                }),
+            // DrawerWidget(
+            //     title: language.bankInfo,
+            //     iconData: ic_update_bank_info,
+            //     icon: MaterialCommunityIcons.bank_outline,
+            //     onTap: () {
+            //       Navigator.pop(context);
+            //       launchScreen(context, BankInfoScreen(),
+            //           pageRouteAnimation: PageRouteAnimation.Slide);
+            //     }),
             DrawerWidget(
                 title: language.settings,
                 iconData: ic_setting,

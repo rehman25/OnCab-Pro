@@ -107,7 +107,7 @@ class DetailScreenState extends State<DetailScreen> {
     client.autoReconnect = true;
 
     try {
-      await client.connect();
+      await client.connect('oncab_driver', '0nC@b_Driv3r');
     } on NoConnectionException catch (e) {
       debugPrint(e.toString());
       client.connect();

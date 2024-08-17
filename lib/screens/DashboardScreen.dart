@@ -732,9 +732,12 @@ class DashboardScreenState extends State<DashboardScreen> {
             if (sharedPref.getDouble(LATITUDE) != null &&
                 sharedPref.getDouble(LONGITUDE) != null)
               GoogleMap(
-                mapToolbarEnabled: false,
-                zoomControlsEnabled: false,
-                myLocationEnabled: false,
+                mapToolbarEnabled: true,
+                buildingsEnabled: true,
+                // trafficEnabled: true,
+                zoomControlsEnabled: true,
+                indoorViewEnabled: true,
+                myLocationEnabled: true,
                 onMapCreated: onMapCreated,
                 initialCameraPosition: CameraPosition(
                   target: driverLocation ??
@@ -1258,7 +1261,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                         padding: EdgeInsets.all(2.0),
                         // color: Colors.green[50],
                         decoration: BoxDecoration(
-                          color: Colors.red[50],
+                          color: Colors.red[300],
                           borderRadius: BorderRadius.circular(
                               15), // Add border radius here
                           // boxShadow: [
@@ -1302,7 +1305,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                         height: 100,
                         padding: EdgeInsets.all(2.0),
                         decoration: BoxDecoration(
-                          color: Colors.blue[50],
+                          color: Colors.green[300],
                           borderRadius: BorderRadius.circular(
                               15), // Add border radius here
                           // boxShadow: [
@@ -1457,16 +1460,16 @@ class DashboardScreenState extends State<DashboardScreen> {
           child: Container(
             padding: EdgeInsets.all(4),
             decoration: BoxDecoration(
-              color: Color(0xFF0e2345),
+              color: Color(0xFF000000),
               boxShadow: [
                 BoxShadow(
-                    color: Colors.black.withOpacity(0.2), spreadRadius: 1),
+                    color: Color(0xFFCAA928).withOpacity(0.2), spreadRadius: 1),
               ],
               borderRadius: BorderRadius.circular(defaultRadius),
             ),
             child: Icon(
               Icons.drag_handle,
-              color: Colors.white,
+              color: Color(0xFFCAA928),
             ),
           ),
         ),
@@ -1475,10 +1478,10 @@ class DashboardScreenState extends State<DashboardScreen> {
           child: Container(
             padding: EdgeInsets.all(5),
             decoration: BoxDecoration(
-              color: Color(0xFF0e2345),
+              color: Color(0xFF000000),
               boxShadow: [
                 BoxShadow(
-                    color: Colors.black.withOpacity(0.2), spreadRadius: 1),
+                    color: Color(0xFFCAA928).withOpacity(0.2), spreadRadius: 1),
               ],
               borderRadius: BorderRadius.circular(defaultRadius),
             ),
@@ -1498,7 +1501,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                     isOffLine
                         ? language.youAreOnlineNow
                         : language.youAreOfflineNow,
-                    style: secondaryTextStyle(color: Colors.white)),
+                    style: secondaryTextStyle(color: Color(0xFFCAA928))),
               ],
             ),
           ),
@@ -1511,16 +1514,16 @@ class DashboardScreenState extends State<DashboardScreen> {
           child: Container(
             padding: EdgeInsets.all(4),
             decoration: BoxDecoration(
-              color: Color(0xFF0e2345),
+              color: Color(0xFF000000),
               boxShadow: [
                 BoxShadow(
-                    color: Colors.black.withOpacity(0.2), spreadRadius: 1),
+                    color: Color(0xFFCAA928).withOpacity(0.2), spreadRadius: 1),
               ],
               borderRadius: BorderRadius.circular(defaultRadius),
             ),
             child: Icon(
               Ionicons.notifications_outline,
-              color: Colors.white,
+              color: Color(0xFFCAA928),
             ),
           ),
         ),
@@ -1535,24 +1538,24 @@ class DashboardScreenState extends State<DashboardScreen> {
       bottom: 110,
       child: FlutterSwitch(
         value: isOffLine,
-        width: 90,
-        height: 35,
+        width: 120,
+        height: 55,
         toggleSize: 25,
         borderRadius: 30.0,
-        padding: 6.0,
+        padding: 15.0,
         inactiveText: language.offLine,
         activeText: language.online,
         showOnOff: true,
-        activeTextColor: Colors.white,
-        inactiveTextColor: Colors.white,
+        activeTextColor: Color(0xFFCAA928),
+        inactiveTextColor: Color(0xFFCAA928),
         activeIcon: ImageIcon(AssetImage(ic_green_car),
-            color: Color(0xFF0e2345), size: 38),
-        inactiveIcon:
-            ImageIcon(AssetImage(ic_red_car), color: Colors.white, size: 40),
-        activeColor: Color(0xFF0e2345),
+            color: Color(0xFFCAA928), size: 38),
+        inactiveIcon: ImageIcon(AssetImage(ic_red_car),
+            color: Color(0xFFCAA928), size: 40),
+        activeColor: Color(0xFF000000),
         activeToggleColor: Colors.green,
         inactiveToggleColor: Colors.red,
-        inactiveColor: Color(0xFF0e2345),
+        inactiveColor: Color(0xFF000000),
         onToggle: (value) async {
           await showConfirmDialogCustom(
               dialogType: DialogType.CONFIRMATION,
