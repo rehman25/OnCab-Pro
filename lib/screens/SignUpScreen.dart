@@ -216,6 +216,13 @@ class SignUpScreenState extends State<SignUpScreen> {
                   state: currentIndex <= 0
                       ? StepState.disabled
                       : StepState.complete,
+                  stepStyle: StepStyle(
+                    color: Colors.amber,
+                    connectorColor: Colors.amber,
+                    indexStyle: const TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
                   title: Text(language.userDetail, style: boldTextStyle()),
                   content: Form(
                     key: formKeys[0],
@@ -364,6 +371,13 @@ class SignUpScreenState extends State<SignUpScreen> {
                   state: currentIndex <= 1
                       ? StepState.disabled
                       : StepState.complete,
+                  stepStyle: StepStyle(
+                    color: Colors.amber,
+                    connectorColor: Colors.amber,
+                    indexStyle: const TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
                   title: Text(language.selectService, style: boldTextStyle()),
                   content: Form(
                     key: formKeys[1],
@@ -419,6 +433,13 @@ class SignUpScreenState extends State<SignUpScreen> {
                   state: currentIndex <= 2
                       ? StepState.disabled
                       : StepState.complete,
+                  stepStyle: StepStyle(
+                    color: Colors.amber,
+                    connectorColor: Colors.amber,
+                    indexStyle: const TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
                   title: Text(language.carModel, style: boldTextStyle()),
                   content: Form(
                     key: formKeys[2],
@@ -434,6 +455,13 @@ class SignUpScreenState extends State<SignUpScreen> {
                   state: currentIndex <= 3
                       ? StepState.indexed
                       : StepState.complete,
+                  stepStyle: StepStyle(
+                    color: Colors.amber,
+                    connectorColor: Colors.amber,
+                    indexStyle: const TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
                   title:
                       Text(language.carProductionYear, style: boldTextStyle()),
                   content: Form(
@@ -450,6 +478,12 @@ class SignUpScreenState extends State<SignUpScreen> {
                   state: currentIndex <= 4
                       ? StepState.disabled
                       : StepState.complete,
+                  stepStyle: StepStyle(
+                    color: Colors.amber,
+                    indexStyle: const TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
                   title: Text(language.carPlateNumber, style: boldTextStyle()),
                   content: Form(
                     key: formKeys[4],
@@ -465,6 +499,13 @@ class SignUpScreenState extends State<SignUpScreen> {
                   state: currentIndex <= 5
                       ? StepState.disabled
                       : StepState.complete,
+                  stepStyle: StepStyle(
+                    color: Colors.amber,
+                    connectorColor: Colors.amber,
+                    indexStyle: const TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
                   title: Text(language.carColor, style: boldTextStyle()),
                   content: Form(
                     key: formKeys[5],

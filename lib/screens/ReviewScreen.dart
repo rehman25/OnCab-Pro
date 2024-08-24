@@ -66,9 +66,11 @@ class ReviewScreenState extends State<ReviewScreen> {
     appStore.setLoading(false);
     await rideDetail(orderId: widget.rideId).then((value) {
       if (value.payment != null && value.payment!.paymentStatus == PENDING) {
-        launchScreen(context, DetailScreen(), pageRouteAnimation: PageRouteAnimation.Slide, isNewTask: true);
+        launchScreen(context, DetailScreen(),
+            pageRouteAnimation: PageRouteAnimation.Slide, isNewTask: true);
       } else {
-        launchScreen(context, DashboardScreen(), pageRouteAnimation: PageRouteAnimation.Slide, isNewTask: true);
+        launchScreen(context, DashboardScreen(),
+            pageRouteAnimation: PageRouteAnimation.Slide, isNewTask: true);
       }
     }).catchError((error) {
       appStore.setLoading(false);
@@ -87,7 +89,8 @@ class ReviewScreenState extends State<ReviewScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(language.howWasYourRide, style: boldTextStyle(color: Colors.white)),
+        title: Text(language.howWasYourRide,
+            style: boldTextStyle(color: Colors.white)),
       ),
       body: Stack(
         children: [
@@ -103,40 +106,52 @@ class ReviewScreenState extends State<ReviewScreen> {
                     children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(35),
-                        child: commonCachedNetworkImage(widget.currentData.rider!.profileImage.validate(), fit: BoxFit.fill, height: 70, width: 70),
+                        child: commonCachedNetworkImage(
+                            widget.currentData.rider!.profileImage.validate(),
+                            fit: BoxFit.fill,
+                            height: 70,
+                            width: 70),
                       ),
                       SizedBox(width: 16),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(height: 8),
-                          Text('${widget.currentData.rider!.firstName.validate()} ${widget.currentData.rider!.lastName.validate()}', style: boldTextStyle()),
+                          Text(
+                              '${widget.currentData.rider!.firstName.validate()} ${widget.currentData.rider!.lastName.validate()}',
+                              style: boldTextStyle()),
                           SizedBox(height: 8),
-                          Text(widget.currentData.rider!.email.validate(), style: secondaryTextStyle()),
+                          Text(widget.currentData.rider!.email.validate(),
+                              style: secondaryTextStyle()),
                         ],
                       ),
                     ],
                   ),
                   SizedBox(height: 32),
                   RatingBar.builder(
+                    glowColor: Colors.red,
                     direction: Axis.horizontal,
-                    glow: false,
-                    allowHalfRating: false,
+                    glow: true,
+                    allowHalfRating: true,
                     wrapAlignment: WrapAlignment.spaceBetween,
                     itemCount: 5,
                     itemPadding: EdgeInsets.symmetric(horizontal: 8),
-                    itemBuilder: (context, _) => Icon(Icons.star, color: Colors.amber),
+                    itemBuilder: (context, _) =>
+                        Icon(Icons.star, color: Colors.amber),
+                    unratedColor: Colors.grey[50],
                     onRatingUpdate: (rating) {
                       rattingData = rating;
                       print(rattingData);
                     },
                   ),
                   SizedBox(height: 32),
-                  Text(language.addReviews, style: boldTextStyle(color: primaryColor)),
+                  Text(language.addReviews,
+                      style: boldTextStyle(color: primaryColor)),
                   SizedBox(height: 16),
                   AppTextField(
                     controller: reviewController,
-                    decoration: inputDecoration(context, label: language.writeYourComments),
+                    decoration: inputDecoration(context,
+                        label: language.writeYourComments),
                     textFieldType: TextFieldType.NAME,
                     textInputAction: TextInputAction.done,
                     minLines: 2,

@@ -30,6 +30,8 @@ class _ChatScreenState extends State<ChatScreen> {
   var messageCont = TextEditingController();
   var messageFocus = FocusNode();
   bool isMe = false;
+  late ChatMessageService chatMessageService;
+  bool mIsEnterKey = false;
 
   @override
   void initState() {
@@ -45,8 +47,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   init() async {
     id = sharedPref.getString(UID)!;
-    mIsEnterKey = sharedPref.getBool(IS_ENTER_KEY).validate();
-    // mSelectedImage = sharedPref.getString(SELECTED_WALLPAPER).validate();
+    mIsEnterKey = sharedPref.getBool(IS_ENTER_KEY) ?? false;
 
     chatMessageService = ChatMessageService();
     chatMessageService.setUnReadStatusToTrue(
@@ -55,12 +56,11 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   sendMessage({FilePickerResult? result}) async {
-    if (result == null) {
-      if (messageCont.text.trim().isEmpty) {
-        messageFocus.requestFocus();
-        return;
-      }
+    if (result == null && messageCont.text.trim().isEmpty) {
+      messageFocus.requestFocus();
+      return;
     }
+
     ChatMessageModel data = ChatMessageModel();
     data.receiverId = widget.userData!.uid!;
     data.senderId = sender.uid;
@@ -68,67 +68,57 @@ class _ChatScreenState extends State<ChatScreen> {
     data.isMessageRead = false;
     data.createdAt = DateTime.now().millisecondsSinceEpoch;
 
-    if (widget.userData!.uid == sharedPref.getString(UID)) {
-      //
-    }
     if (result != null) {
-      if (result.files.single.path!.isNotEmpty) {
-        data.messageType = MessageType.IMAGE.name;
-      } else {
-        data.messageType = MessageType.TEXT.name;
-      }
+      data.messageType = result.files.single.path!.isNotEmpty
+          ? MessageType.IMAGE.name
+          : MessageType.TEXT.name;
     } else {
       data.messageType = MessageType.TEXT.name;
     }
 
-    notificationService
-        .sendPushNotifications(
-            sharedPref.getString(USER_NAME)!, messageCont.text,
-            receiverPlayerId: widget.userData!.playerId)
-        .catchError(log);
+    try {
+      await notificationService.sendPushNotifications(
+          sharedPref.getString(USER_NAME)!, messageCont.text,
+          receiverPlayerId: widget.userData!.playerId);
+    } catch (e) {
+      log(e);
+    }
+
     messageCont.clear();
     setState(() {});
-    return await chatMessageService.addMessage(data).then((value) async {
-      if (result != null) {
-        FileModel fileModel = FileModel();
-        fileModel.id = value.id;
-        fileModel.file = File(result.files.single.path!);
-        fileList.add(fileModel);
 
-        setState(() {});
-      }
+    final messageDoc = await chatMessageService.addMessage(data);
+    if (result != null) {
+      FileModel fileModel = FileModel();
+      fileModel.id = messageDoc.id;
+      fileModel.file = File(result.files.single.path!);
+      fileList.add(fileModel);
+      setState(() {});
+    }
 
-      await chatMessageService
-          .addMessageToDb(
-        value,
-        data,
-        sender,
-        widget.userData,
-      )
-          .then((value) {
-        //
-      });
+    await chatMessageService.addMessageToDb(
+      messageDoc,
+      data,
+      sender,
+      widget.userData,
+    );
 
-      userService.fireStore
-          .collection(USER_COLLECTION)
+    final updateTime = DateTime.now().millisecondsSinceEpoch;
+
+    final userCollection = userService.fireStore.collection(USER_COLLECTION);
+    await Future.wait([
+      userCollection
           .doc(sharedPref.getInt(USER_ID).toString())
           .collection(CONTACT_COLLECTION)
           .doc(widget.userData!.uid)
-          .update({
-        'lastMessageTime': DateTime.now().millisecondsSinceEpoch
-      }).catchError((e) {
-        log(e);
-      });
-      userService.fireStore
-          .collection(USER_COLLECTION)
+          .update({'lastMessageTime': updateTime}),
+      userCollection
           .doc(widget.userData!.uid)
           .collection(CONTACT_COLLECTION)
           .doc(sharedPref.getInt(USER_ID).toString())
-          .update({
-        'lastMessageTime': DateTime.now().millisecondsSinceEpoch
-      }).catchError((e) {
-        log(e);
-      });
+          .update({'lastMessageTime': updateTime}),
+    ]).catchError((e) {
+      log(e);
     });
   }
 
@@ -140,9 +130,7 @@ class _ChatScreenState extends State<ChatScreen> {
         title: Row(
           children: [
             GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
+              onTap: () => Navigator.pop(context),
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 16),
                 child: Icon(Icons.arrow_back, color: Colors.white),
