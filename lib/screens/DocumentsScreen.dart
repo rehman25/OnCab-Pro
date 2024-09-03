@@ -269,96 +269,108 @@ class DocumentsScreenState extends State<DocumentsScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Container(
-                  //   padding: EdgeInsets.all(10),
-                  //   decoration: BoxDecoration(
-                  //     color: Colors.transparent,
-                  //     border: Border.all(color: dividerColor),
-                  //     borderRadius: radius(),
-                  //   ),
-                  //   child: Column(
-                  //     crossAxisAlignment: CrossAxisAlignment.start,
-                  //     children: [
-                  //       if (documentList.isNotEmpty)
-                  //         Column(
-                  //           children: documentList.map((document) {
-                  //             return InkWell(
-                  //               onTap: () {
-                  //                 setState(() {
-                  //                   docId = document.id!;
-                  //                   isExpire = document.hasExpiryDate!;
-                  //                 });
-                  //               },
-                  //               child: Container(
-                  //                 padding: EdgeInsets.all(10),
-                  //                 margin: EdgeInsets.only(top: 16),
-                  //                 decoration: BoxDecoration(
-                  //                   color: Colors.transparent,
-                  //                   border: Border.all(
-                  //                       color: docId == document.id
-                  //                           ? primaryColor
-                  //                           : dividerColor),
-                  //                   borderRadius: radius(),
-                  //                 ),
-                  //                 child: Row(
-                  //                   mainAxisSize: MainAxisSize.min,
-                  //                   children: [
-                  //                     Icon(
-                  //                       docId == document.id
-                  //                           ? Icons.check
-                  //                           : Icons.add,
-                  //                       color: primaryColor,
-                  //                       size: 24,
-                  //                     ),
-                  //                     SizedBox(width: 8),
-                  //                     Text(
-                  //                       document.name!,
-                  //                       style: secondaryTextStyle(),
-                  //                     ),
-                  //                   ],
-                  //                 ),
-                  //               ),
-                  //             );
-                  //           }).toList(),
-                  //         ),
-                  //       if (docId != 0)
-                  //         Visibility(
-                  //           visible: !uploadedDocList.contains(docId),
-                  //           child: InkWell(
-                  //             onTap: () {
-                  //               if (isExpire == 1) {
-                  //                 getMultipleFile(
-                  //                     docId, isExpire == 0 ? null : 1,
-                  //                     dateTime: selectedDate);
-                  //               } else {
-                  //                 getMultipleFile(
-                  //                     docId, isExpire == 0 ? null : 1);
-                  //               }
-                  //             },
-                  //             child: Container(
-                  //               padding: EdgeInsets.all(10),
-                  //               margin: EdgeInsets.only(top: 16),
-                  //               decoration: BoxDecoration(
-                  //                 color: Colors.transparent,
-                  //                 border: Border.all(color: dividerColor),
-                  //                 borderRadius: radius(),
-                  //               ),
-                  //               child: Row(
-                  //                 mainAxisSize: MainAxisSize.min,
-                  //                 children: [
-                  //                   Icon(Icons.add,
-                  //                       color: primaryColor, size: 24),
-                  //                   SizedBox(width: 8),
-                  //                   Text(language.addDocument,
-                  //                       style: secondaryTextStyle()),
-                  //                 ],
-                  //               ),
-                  //             ),
-                  //           ),
-                  //         ),
-                  //     ],
-                  //   ),
-                  // ),
+                  Container(
+                    // padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Colors.transparent,
+                      // border: Border.all(color: dividerColor),
+                      borderRadius: radius(),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (documentList.isNotEmpty)
+                          Column(
+                            children: documentList.map((document) {
+                              return InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    docId = document.id!;
+                                    isExpire = document.hasExpiryDate!;
+                                  });
+                                  if (isExpire == 1) {
+                                    getMultipleFile(
+                                        docId, isExpire == 0 ? null : 1,
+                                        dateTime: selectedDate);
+                                  } else {
+                                    getMultipleFile(
+                                        docId, isExpire == 0 ? null : 1);
+                                  }
+                                },
+                                child: Container(
+                                  height: 120,
+                                  width: 400,
+                                  padding: EdgeInsets.all(10),
+                                  margin: EdgeInsets.only(top: 16),
+                                  decoration: BoxDecoration(
+                                    color: Colors.transparent,
+                                    border: Border.all(
+                                        color: docId == document.id
+                                            ? primaryColor
+                                            : dividerColor),
+                                    borderRadius: radius(),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        docId == document.id
+                                            ? Icons.check
+                                            : Icons.add,
+                                        color: primaryColor,
+                                        size: 24,
+                                      ),
+                                      SizedBox(width: 8),
+                                      Text(
+                                        document.name!,
+                                        style: secondaryTextStyle(),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        // if (docId != 0)
+                        //   Visibility(
+                        //     visible: !uploadedDocList.contains(docId),
+                        //     child: InkWell(
+                        //       onTap: () {
+                        //         if (isExpire == 1) {
+                        //           getMultipleFile(
+                        //               docId, isExpire == 0 ? null : 1,
+                        //               dateTime: selectedDate);
+                        //         } else {
+                        //           getMultipleFile(
+                        //               docId, isExpire == 0 ? null : 1);
+                        //         }
+                        //       },
+                        //       child: Container(
+                        //         padding: EdgeInsets.all(10),
+                        //         margin: EdgeInsets.only(top: 16),
+                        //         decoration: BoxDecoration(
+                        //           color: Colors.transparent,
+                        //           border: Border.all(color: dividerColor),
+                        //           borderRadius: radius(),
+                        //         ),
+                        //         child: Row(
+                        //           mainAxisSize: MainAxisSize.min,
+                        //           children: [
+                        //             Icon(Icons.add,
+                        //                 color: primaryColor, size: 24),
+                        //             SizedBox(width: 8),
+                        //             Text(language.addDocument,
+                        //                 style: secondaryTextStyle()),
+                        //           ],
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ),
+                      ],
+                    ),
+                  ),
 
                   // Row(
                   //   mainAxisAlignment: MainAxisAlignment.center,
@@ -385,88 +397,91 @@ class DocumentsScreenState extends State<DocumentsScreen> {
                   //   ],
                   // ),
 
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          padding: EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                              color: Colors.transparent,
-                              border: Border.all(color: dividerColor),
-                              borderRadius: radius()),
-                          child: DropdownButtonFormField<DocumentModel>(
-                            hint: Text(language.selectDocument,
-                                style: primaryTextStyle()),
-                            decoration:
-                                InputDecoration.collapsed(hintText: null),
-                            isExpanded: true,
-                            isDense: true,
-                            items: documentList.map((e) {
-                              return DropdownMenuItem(
-                                value: e,
-                                child: RichText(
-                                  text: TextSpan(
-                                    text: e.name.validate(),
-                                    style: primaryTextStyle(),
-                                    children: [
-                                      TextSpan(
-                                          text:
-                                              '${e.isRequired == 1 ? ' *' : ''}',
-                                          style:
-                                              boldTextStyle(color: Colors.red)),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            }).toList(),
-                            onChanged: (DocumentModel? val) {
-                              docId = val!.id!;
-                              isExpire = val.hasExpiryDate!;
+                  // Row(
+                  //   children: [
+                  //     Expanded(
+                  //       child: Container(
+                  //         padding: EdgeInsets.all(10),
+                  //         decoration: BoxDecoration(
+                  //             color: Colors.transparent,
+                  //             border: Border.all(color: dividerColor),
+                  //             borderRadius: radius()),
+                  //         child: DropdownButtonFormField<DocumentModel>(
+                  //           hint: Text(language.selectDocument,
+                  //               style: primaryTextStyle()),
+                  //           decoration:
+                  //               InputDecoration.collapsed(hintText: null),
+                  //           isExpanded: true,
+                  //           isDense: true,
+                  //           items: documentList.map((e) {
+                  //             return DropdownMenuItem(
+                  //               value: e,
+                  //               child: RichText(
+                  //                 text: TextSpan(
+                  //                   text: e.name.validate(),
+                  //                   style: primaryTextStyle(),
+                  //                   children: [
+                  //                     TextSpan(
+                  //                         text:
+                  //                             '${e.isRequired == 1 ? ' *' : ''}',
+                  //                         style:
+                  //                             boldTextStyle(color: Colors.red)),
+                  //                   ],
+                  //                 ),
+                  //               ),
+                  //             );
+                  //           }).toList(),
+                  //           onChanged: (DocumentModel? val) {
+                  //             docId = val!.id!;
+                  //             isExpire = val.hasExpiryDate!;
 
-                              setState(() {});
-                            },
-                          ),
-                        ),
-                      ),
-                      if (docId != 0)
-                        Visibility(
-                          visible: !uploadedDocList.contains(docId),
-                          child: inkWellWidget(
-                            onTap: () {
-                              if (isExpire == 1) {
-                                getMultipleFile(docId, isExpire == 0 ? null : 1,
-                                    dateTime: selectedDate);
-                              } else {
-                                getMultipleFile(
-                                    docId, isExpire == 0 ? null : 1);
-                              }
-                            },
-                            child: Container(
-                              padding: EdgeInsets.all(10),
-                              margin: EdgeInsets.only(left: 16),
-                              decoration: BoxDecoration(
-                                  color: Colors.transparent,
-                                  border: Border.all(color: dividerColor),
-                                  borderRadius: radius()),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(Icons.add,
-                                      color: primaryColor, size: 24),
-                                  SizedBox(width: 8),
-                                  Text(language.addDocument,
-                                      style: secondaryTextStyle()),
-                                ],
-                              ),
-                            ),
-                          ),
-                        )
-                    ],
-                  ),
+                  //             setState(() {});
+                  //           },
+                  //         ),
+                  //       ),
+                  //     ),
+                  //     if (docId != 0)
+                  //       Visibility(
+                  //         visible: !uploadedDocList.contains(docId),
+                  //         child: inkWellWidget(
+                  //           onTap: () {
+                  //             if (isExpire == 1) {
+                  //               getMultipleFile(docId, isExpire == 0 ? null : 1,
+                  //                   dateTime: selectedDate);
+                  //             } else {
+                  //               getMultipleFile(
+                  //                   docId, isExpire == 0 ? null : 1);
+                  //             }
+                  //           },
+                  //           child: Container(
+                  //             padding: EdgeInsets.all(10),
+                  //             margin: EdgeInsets.only(left: 16),
+                  //             decoration: BoxDecoration(
+                  //                 color: Colors.transparent,
+                  //                 border: Border.all(color: dividerColor),
+                  //                 borderRadius: radius()),
+                  //             child: Row(
+                  //               mainAxisSize: MainAxisSize.min,
+                  //               children: [
+                  //                 Icon(Icons.add,
+                  //                     color: primaryColor, size: 24),
+                  //                 SizedBox(width: 8),
+                  //                 Text(language.addDocument,
+                  //                     style: secondaryTextStyle()),
+                  //               ],
+                  //             ),
+                  //           ),
+                  //         ),
+                  //       )
+                  //   ],
+                  // ),
+
                   SizedBox(height: 8),
+
                   Text(language.isMandatoryDocument,
                       style: primaryTextStyle(color: Colors.red)),
                   SizedBox(height: 30),
+
                   ListView.separated(
                     shrinkWrap: true,
                     itemCount: driverDocumentList.length,

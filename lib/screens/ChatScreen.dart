@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +33,7 @@ class _ChatScreenState extends State<ChatScreen> {
   bool isMe = false;
   late ChatMessageService chatMessageService;
   bool mIsEnterKey = false;
+  bool isInitialized = false;
 
   @override
   void initState() {
@@ -48,11 +50,13 @@ class _ChatScreenState extends State<ChatScreen> {
   init() async {
     id = sharedPref.getString(UID)!;
     mIsEnterKey = sharedPref.getBool(IS_ENTER_KEY) ?? false;
-
     chatMessageService = ChatMessageService();
     chatMessageService.setUnReadStatusToTrue(
         senderId: sender.uid!, receiverId: widget.userData!.uid!);
-    setState(() {});
+
+    setState(() {
+      isInitialized = true;
+    });
   }
 
   sendMessage({FilePickerResult? result}) async {
@@ -124,9 +128,15 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (!isInitialized) {
+      return Center(
+          child: CircularProgressIndicator(
+        color: Colors.red,
+      ));
+    }
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        automaticallyImplyLeading: true,
         title: Row(
           children: [
             GestureDetector(
