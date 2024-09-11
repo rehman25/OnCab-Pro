@@ -5,7 +5,16 @@ import 'package:taxi_driver/utils/Extensions/StringExtensions.dart';
 import '../Constants.dart';
 import 'app_common.dart';
 
-enum TextFieldType { EMAIL, PASSWORD, NAME, ADDRESS, OTHER, PHONE, URL, USERNAME }
+enum TextFieldType {
+  EMAIL,
+  PASSWORD,
+  NAME,
+  ADDRESS,
+  OTHER,
+  PHONE,
+  URL,
+  USERNAME
+}
 
 /// Default Text Form Field
 class AppTextField extends StatefulWidget {
@@ -118,26 +127,38 @@ class _AppTextFieldState extends State<AppTextField> {
     if (widget.isValidationRequired ?? true) {
       if (widget.validator != null) {
         return widget.validator;
-      } else if (widget.textFieldType == TextFieldType.EMAIL) {
+      }
+      // else if (widget.textFieldType == TextFieldType.EMAIL) {
+      //   return (s) {
+      //     if (s!.trim().isEmpty) return widget.errorThisFieldRequired.validate(value: errorThisFieldRequired);
+      //     if (!s.trim().validateEmail()) return widget.errorInvalidEmail.validate(value: 'Email is invalid');
+      //     return null;
+      //   };
+      // }
+      else if (widget.textFieldType == TextFieldType.PASSWORD) {
         return (s) {
-          if (s!.trim().isEmpty) return widget.errorThisFieldRequired.validate(value: errorThisFieldRequired);
-          if (!s.trim().validateEmail()) return widget.errorInvalidEmail.validate(value: 'Email is invalid');
+          if (s!.trim().isEmpty)
+            return widget.errorThisFieldRequired
+                .validate(value: errorThisFieldRequired);
+          if (s.trim().length < passwordLengthGlobal)
+            return widget.errorMinimumPasswordLength.validate(
+                value:
+                    'Minimum password length should be $passwordLengthGlobal');
           return null;
         };
-      } else if (widget.textFieldType == TextFieldType.PASSWORD) {
+      } else if (widget.textFieldType == TextFieldType.NAME ||
+          widget.textFieldType == TextFieldType.PHONE) {
         return (s) {
-          if (s!.trim().isEmpty) return widget.errorThisFieldRequired.validate(value: errorThisFieldRequired);
-          if (s.trim().length < passwordLengthGlobal) return widget.errorMinimumPasswordLength.validate(value: 'Minimum password length should be $passwordLengthGlobal');
-          return null;
-        };
-      } else if (widget.textFieldType == TextFieldType.NAME || widget.textFieldType == TextFieldType.PHONE) {
-        return (s) {
-          if (s!.trim().isEmpty) return widget.errorThisFieldRequired.validate(value: errorThisFieldRequired);
+          if (s!.trim().isEmpty)
+            return widget.errorThisFieldRequired
+                .validate(value: errorThisFieldRequired);
           return null;
         };
       } else if (widget.textFieldType == TextFieldType.URL) {
         return (s) {
-          if (s!.trim().isEmpty) return widget.errorThisFieldRequired.validate(value: errorThisFieldRequired);
+          if (s!.trim().isEmpty)
+            return widget.errorThisFieldRequired
+                .validate(value: errorThisFieldRequired);
           if (!s.validateURL()) {
             return widget.errorInvalidURL.validate(value: 'Invalid URL');
           }
@@ -145,9 +166,12 @@ class _AppTextFieldState extends State<AppTextField> {
         };
       } else if (widget.textFieldType == TextFieldType.USERNAME) {
         return (s) {
-          if (s!.trim().isEmpty) return widget.errorThisFieldRequired.validate(value: errorThisFieldRequired);
+          if (s!.trim().isEmpty)
+            return widget.errorThisFieldRequired
+                .validate(value: errorThisFieldRequired);
           if (s.contains(' ')) {
-            return widget.errorInvalidUsername.validate(value: 'Username should not contain space');
+            return widget.errorInvalidUsername
+                .validate(value: 'Username should not contain space');
           }
           return null;
         };
@@ -205,12 +229,14 @@ class _AppTextFieldState extends State<AppTextField> {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: widget.controller,
-      obscureText: widget.textFieldType == TextFieldType.PASSWORD && !isPasswordVisible,
+      obscureText:
+          widget.textFieldType == TextFieldType.PASSWORD && !isPasswordVisible,
       validator: applyValidation(),
       textCapitalization: applyTextCapitalization(),
       textInputAction: applyTextInputAction(),
       onFieldSubmitted: (s) {
-        if (widget.nextFocus != null) FocusScope.of(context).requestFocus(widget.nextFocus);
+        if (widget.nextFocus != null)
+          FocusScope.of(context).requestFocus(widget.nextFocus);
 
         if (widget.onFieldSubmitted != null) widget.onFieldSubmitted!.call(s);
       },
@@ -222,8 +248,11 @@ class _AppTextFieldState extends State<AppTextField> {
                       ? widget.suffix
                       : GestureDetector(
                           child: Icon(
-                            isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                            color: widget.suffixIconColor ?? Theme.of(context).iconTheme.color,
+                            isPasswordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            color: widget.suffixIconColor ??
+                                Theme.of(context).iconTheme.color,
                           ),
                           onTap: () {
                             isPasswordVisible = !isPasswordVisible;
@@ -237,12 +266,15 @@ class _AppTextFieldState extends State<AppTextField> {
       focusNode: widget.focus,
       style: widget.textStyle ?? primaryTextStyle(),
       textAlign: widget.textAlign ?? TextAlign.start,
-      maxLines: widget.textFieldType == TextFieldType.ADDRESS ? null : widget.maxLines ?? 1,
+      maxLines: widget.textFieldType == TextFieldType.ADDRESS
+          ? null
+          : widget.maxLines ?? 1,
       minLines: widget.minLines ?? 1,
       autofocus: widget.autoFocus ?? false,
       enabled: widget.enabled,
       onChanged: widget.onChanged,
-      cursorColor: widget.cursorColor ?? Theme.of(context).textSelectionTheme.cursorColor,
+      cursorColor: widget.cursorColor ??
+          Theme.of(context).textSelectionTheme.cursorColor,
       readOnly: widget.readOnly ?? false,
       maxLength: widget.maxLength,
       enableSuggestions: widget.enableSuggestions ?? true,

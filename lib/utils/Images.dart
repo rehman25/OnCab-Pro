@@ -12,6 +12,7 @@ const ic_logout = 'images/ic_logout.png';
 const ic_map_icon = 'images/ic_map_icon.png';
 
 const ic_mobile = 'images/ic_mobile.png';
+const ic_mobile_White = 'images/ic_mobile_white.png';
 const ic_logo_white = 'images/ic_driver_white.png';
 const ic_taxi_logo = 'images/ic_app_logo.jpg';
 const ic_insta_logo = 'images/ic_insta.png';

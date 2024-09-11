@@ -48,12 +48,27 @@ class _ChatScreenState extends State<ChatScreen> {
   );
 
   init() async {
-    id = sharedPref.getString(UID)!;
+    String? uid = sharedPref.getString(UID);
+    if (uid == null) {
+      // Handle the case when UID is null
+      // For example, navigate back or show an error message
+      Navigator.pop(context);
+      return;
+    } else {
+      id = uid;
+    }
     mIsEnterKey = sharedPref.getBool(IS_ENTER_KEY) ?? false;
     chatMessageService = ChatMessageService();
-    chatMessageService.setUnReadStatusToTrue(
-        senderId: sender.uid!, receiverId: widget.userData!.uid!);
-
+    if (widget.userData != null) {
+      log('${widget.userData} jjjj');
+      chatMessageService.setUnReadStatusToTrue(
+          senderId: sender.uid!, receiverId: widget.userData!.uid!);
+    } else {
+      // Handle the case when userData is null
+      // For example, navigate back or show an error message
+      Navigator.pop(context);
+      return;
+    }
     setState(() {
       isInitialized = true;
     });

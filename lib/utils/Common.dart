@@ -38,7 +38,9 @@ Widget dotIndicator(list, i) {
             height: 8,
             width: 8,
             margin: EdgeInsets.all(4),
-            decoration: BoxDecoration(color: i == ind ? Colors.white : Colors.grey.withOpacity(0.5), borderRadius: BorderRadius.circular(defaultRadius)),
+            decoration: BoxDecoration(
+                color: i == ind ? Colors.white : Colors.grey.withOpacity(0.5),
+                borderRadius: BorderRadius.circular(defaultRadius)),
           );
         },
       ),
@@ -46,16 +48,29 @@ Widget dotIndicator(list, i) {
   );
 }
 
-InputDecoration inputDecoration(BuildContext context, {String? label, Widget? prefixIcon, Widget? suffixIcon}) {
+InputDecoration inputDecoration(BuildContext context,
+    {String? label, Widget? prefixIcon, Widget? suffixIcon}) {
   return InputDecoration(
     prefixIcon: prefixIcon,
     suffixIcon: suffixIcon,
-    border: OutlineInputBorder(borderRadius: BorderRadius.circular(defaultRadius), borderSide: BorderSide(color: dividerColor)),
-    focusedErrorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(defaultRadius), borderSide: BorderSide(color: dividerColor)),
-    disabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(defaultRadius), borderSide: BorderSide(color: dividerColor)),
-    focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(defaultRadius), borderSide: BorderSide(color: Colors.black)),
-    enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(defaultRadius), borderSide: BorderSide(color: dividerColor)),
-    errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(defaultRadius), borderSide: BorderSide(color: Colors.red)),
+    border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(defaultRadius),
+        borderSide: BorderSide(color: dividerColor)),
+    focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(defaultRadius),
+        borderSide: BorderSide(color: dividerColor)),
+    disabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(defaultRadius),
+        borderSide: BorderSide(color: dividerColor)),
+    focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(defaultRadius),
+        borderSide: BorderSide(color: Color(0xFFCAA928))),
+    enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(defaultRadius),
+        borderSide: BorderSide(color: dividerColor)),
+    errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(defaultRadius),
+        borderSide: BorderSide(color: Colors.red)),
     alignLabelWithHint: true,
     filled: false,
     isDense: true,
@@ -74,7 +89,12 @@ EdgeInsets dynamicAppButtonPadding(BuildContext context) {
 }
 
 Widget inkWellWidget({Function()? onTap, required Widget child}) {
-  return InkWell(onTap: onTap, child: child, highlightColor: Colors.transparent, hoverColor: Colors.transparent, splashColor: Colors.transparent);
+  return InkWell(
+      onTap: onTap,
+      child: child,
+      highlightColor: Colors.transparent,
+      hoverColor: Colors.transparent,
+      splashColor: Colors.transparent);
 }
 
 Widget commonCachedNetworkImage(
@@ -87,7 +107,12 @@ Widget commonCachedNetworkImage(
   double? radius,
 }) {
   if (url != null && url.isEmpty) {
-    return placeHolderWidget(height: height, width: width, fit: fit, alignment: alignment, radius: radius);
+    return placeHolderWidget(
+        height: height,
+        width: width,
+        fit: fit,
+        alignment: alignment,
+        radius: radius);
   } else if (url.validate().startsWith('http')) {
     return CachedNetworkImage(
       imageUrl: url!,
@@ -96,20 +121,43 @@ Widget commonCachedNetworkImage(
       fit: fit,
       alignment: alignment as Alignment? ?? Alignment.center,
       errorWidget: (_, s, d) {
-        return placeHolderWidget(height: height, width: width, fit: fit, alignment: alignment, radius: radius);
+        return placeHolderWidget(
+            height: height,
+            width: width,
+            fit: fit,
+            alignment: alignment,
+            radius: radius);
       },
       placeholder: (_, s) {
         if (!usePlaceholderIfUrlEmpty) return SizedBox();
-        return placeHolderWidget(height: height, width: width, fit: fit, alignment: alignment, radius: radius);
+        return placeHolderWidget(
+            height: height,
+            width: width,
+            fit: fit,
+            alignment: alignment,
+            radius: radius);
       },
     );
   } else {
-    return Image.network(url!, height: height, width: width, fit: fit, alignment: alignment ?? Alignment.center);
+    return Image.network(url!,
+        height: height,
+        width: width,
+        fit: fit,
+        alignment: alignment ?? Alignment.center);
   }
 }
 
-Widget placeHolderWidget({double? height, double? width, BoxFit? fit, AlignmentGeometry? alignment, double? radius}) {
-  return Image.asset('images/placeholder.jpg', height: height, width: width, fit: fit ?? BoxFit.cover, alignment: alignment ?? Alignment.center);
+Widget placeHolderWidget(
+    {double? height,
+    double? width,
+    BoxFit? fit,
+    AlignmentGeometry? alignment,
+    double? radius}) {
+  return Image.asset('images/placeholder.jpg',
+      height: height,
+      width: width,
+      fit: fit ?? BoxFit.cover,
+      alignment: alignment ?? Alignment.center);
 }
 
 List<BoxShadow> defaultBoxShadow({
@@ -152,7 +200,11 @@ Widget loaderWidget() {
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
-          BoxShadow(color: Colors.grey.withOpacity(0.4), blurRadius: 10, spreadRadius: 0, offset: Offset(0.0, 0.0)),
+          BoxShadow(
+              color: Colors.grey.withOpacity(0.4),
+              blurRadius: 10,
+              spreadRadius: 0,
+              offset: Offset(0.0, 0.0)),
         ],
       ),
       width: 50,
@@ -163,17 +215,22 @@ Widget loaderWidget() {
 }
 
 void afterBuildCreated(Function()? onCreated) {
-  makeNullable(SchedulerBinding.instance)!.addPostFrameCallback((_) => onCreated?.call());
+  makeNullable(SchedulerBinding.instance)!
+      .addPostFrameCallback((_) => onCreated?.call());
 }
 
 T? makeNullable<T>(T? value) => value;
 
 String printDate(String date) {
-  return DateFormat('dd MMM yyyy').format(DateTime.parse(date).toLocal()) + " at " + DateFormat('hh:mm a').format(DateTime.parse(date).toLocal());
+  return DateFormat('dd MMM yyyy').format(DateTime.parse(date).toLocal()) +
+      " at " +
+      DateFormat('hh:mm a').format(DateTime.parse(date).toLocal());
 }
 
 String printAmount(String amount) {
-  return appStore.currencyPosition == LEFT ? '${appStore.currencyCode} $amount' : '$amount ${appStore.currencyCode}';
+  return appStore.currencyPosition == LEFT
+      ? '${appStore.currencyCode} $amount'
+      : '$amount ${appStore.currencyCode}';
 }
 
 Widget emptyWidget() {
@@ -222,7 +279,9 @@ bool get isRTL => rtlLanguage.contains(appStore.selectedLanguage);
 
 double calculateDistance(lat1, lon1, lat2, lon2) {
   var p = 0.017453292519943295;
-  var a = 0.5 - cos((lat2 - lat1) * p) / 2 + cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2;
+  var a = 0.5 -
+      cos((lat2 - lat1) * p) / 2 +
+      cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2;
   return (12742 * asin(sqrt(a))).toStringAsFixed(digitAfterDecimal).toDouble();
 }
 
@@ -231,8 +290,15 @@ Widget totalCount({String? title, num? amount, bool? isTotal = false}) {
     mainAxisAlignment: MainAxisAlignment.start,
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Expanded(child: Text(title!, style: isTotal == true ? boldTextStyle(color: Colors.green, size: 18) : secondaryTextStyle())),
-      Text(printAmount(amount!.toStringAsFixed(digitAfterDecimal)), style: isTotal == true ? boldTextStyle(color: Colors.green, size: 18) : boldTextStyle(size: 14)),
+      Expanded(
+          child: Text(title!,
+              style: isTotal == true
+                  ? boldTextStyle(color: Colors.green, size: 18)
+                  : secondaryTextStyle())),
+      Text(printAmount(amount!.toStringAsFixed(digitAfterDecimal)),
+          style: isTotal == true
+              ? boldTextStyle(color: Colors.green, size: 18)
+              : boldTextStyle(size: 14)),
     ],
   );
 }
@@ -241,10 +307,13 @@ Future<bool> checkPermission() async {
   // Request app level location permission
   LocationPermission locationPermission = await Geolocator.requestPermission();
 
-  if (locationPermission == LocationPermission.whileInUse || locationPermission == LocationPermission.always) {
+  if (locationPermission == LocationPermission.whileInUse ||
+      locationPermission == LocationPermission.always) {
     // Check system level location permission
     if (!await Geolocator.isLocationServiceEnabled()) {
-      return await Geolocator.openLocationSettings().then((value) => false).catchError((e) => false);
+      return await Geolocator.openLocationSettings()
+          .then((value) => false)
+          .catchError((e) => false);
     } else {
       return true;
     }
@@ -274,7 +343,11 @@ Future<Position?> determinePosition() async {
 
 /// Handle error and loading widget when using FutureBuilder or StreamBuilder
 Widget snapWidgetHelper<T>(AsyncSnapshot<T> snap,
-    {Widget? errorWidget, Widget? loadingWidget, String? defaultErrorMessage, @Deprecated('Do not use this') bool checkHasData = false, Widget Function(String)? errorBuilder}) {
+    {Widget? errorWidget,
+    Widget? loadingWidget,
+    String? defaultErrorMessage,
+    @Deprecated('Do not use this') bool checkHasData = false,
+    Widget Function(String)? errorBuilder}) {
   if (snap.hasError) {
     log(snap.error);
     if (errorBuilder != null) {
@@ -359,7 +432,8 @@ Widget earningWidget({String? text, String? image, num? totalAmount}) {
           children: [
             Text(text!, style: boldTextStyle(color: Colors.white)),
             SizedBox(height: 8),
-            Text(totalAmount.toString(), style: boldTextStyle(color: Colors.white)),
+            Text(totalAmount.toString(),
+                style: boldTextStyle(color: Colors.white)),
           ],
         ),
         Expanded(
@@ -368,7 +442,9 @@ Widget earningWidget({String? text, String? image, num? totalAmount}) {
         Container(
           margin: EdgeInsets.only(left: 2),
           padding: EdgeInsets.all(4),
-          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(defaultRadius)),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(defaultRadius)),
           child: Image.asset(image!, fit: BoxFit.cover, height: 40, width: 40),
         )
       ],
@@ -376,13 +452,24 @@ Widget earningWidget({String? text, String? image, num? totalAmount}) {
   );
 }
 
-Widget earningText({String? title, num? amount, bool? isTotal = false, bool? isRides = false}) {
+Widget earningText(
+    {String? title,
+    num? amount,
+    bool? isTotal = false,
+    bool? isRides = false}) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
-      Text(title!, style: isTotal == true ? boldTextStyle(size: 18) : primaryTextStyle()),
-      Text(isRides.validate() ? amount.toString() : printAmount(amount!.toStringAsFixed(digitAfterDecimal)),
-          style: isTotal == true ? boldTextStyle(size: 18, color: Colors.green) : primaryTextStyle()),
+      Text(title!,
+          style:
+              isTotal == true ? boldTextStyle(size: 18) : primaryTextStyle()),
+      Text(
+          isRides.validate()
+              ? amount.toString()
+              : printAmount(amount!.toStringAsFixed(digitAfterDecimal)),
+          style: isTotal == true
+              ? boldTextStyle(size: 18, color: Colors.green)
+              : primaryTextStyle()),
     ],
   );
 }
@@ -427,8 +514,10 @@ Widget mapRedirectionWidget({required LatLng latLong}) {
     },
     child: Container(
       padding: EdgeInsets.all(4),
-      decoration:
-          BoxDecoration(color: !appStore.isDarkMode ? scaffoldColorLight : scaffoldColorDark, borderRadius: BorderRadius.all(radiusCircular(8)), border: Border.all(width: 1, color: dividerColor)),
+      decoration: BoxDecoration(
+          color: !appStore.isDarkMode ? scaffoldColorLight : scaffoldColorDark,
+          borderRadius: BorderRadius.all(radiusCircular(8)),
+          border: Border.all(width: 1, color: dividerColor)),
       child: Image.asset(ic_map_icon),
       width: 30,
       height: 30,
@@ -439,7 +528,10 @@ Widget mapRedirectionWidget({required LatLng latLong}) {
 Widget chatCallWidget(IconData icon) {
   return Container(
     padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-    decoration: BoxDecoration(border: Border.all(color: dividerColor), color: appStore.isDarkMode ? scaffoldColorDark : scaffoldColorLight, borderRadius: BorderRadius.circular(defaultRadius)),
+    decoration: BoxDecoration(
+        border: Border.all(color: dividerColor),
+        color: appStore.isDarkMode ? scaffoldColorDark : scaffoldColorLight,
+        borderRadius: BorderRadius.circular(defaultRadius)),
     child: Icon(icon, size: 18, color: primaryColor),
   );
 }
@@ -476,7 +568,8 @@ oneSignalSettings() async {
   OneSignal.initialize(mOneSignalAppIdDriver);
 
   OneSignal.Notifications.addForegroundWillDisplayListener((event) {
-    print('NOTIFICATION WILL DISPLAY LISTENER CALLED WITH: ${event.notification.jsonRepresentation()}');
+    print(
+        'NOTIFICATION WILL DISPLAY LISTENER CALLED WITH: ${event.notification.jsonRepresentation()}');
     event.preventDefault();
     event.notification.display();
   });
@@ -487,7 +580,8 @@ oneSignalSettings() async {
   }
   OneSignal.Notifications.addClickListener((notification) async {
     var notId = notification.notification.additionalData!["id"];
-    log("$notId---" + notification.notification.additionalData!['type'].toString());
+    log("$notId---" +
+        notification.notification.additionalData!['type'].toString());
     var notType = notification.notification.additionalData!['type'];
     if (notType != null) {
       await rideDetail(orderId: notId).then((value) {
@@ -510,7 +604,8 @@ oneSignalSettings() async {
     }
     if (notId != null) {
       if (notId.toString().contains('CHAT')) {
-        UserDetailModel user = await getUserDetail(userId: int.parse(notId.toString().replaceAll("CHAT_", "")));
+        UserDetailModel user = await getUserDetail(
+            userId: int.parse(notId.toString().replaceAll("CHAT_", "")));
         launchScreen(getContext, ChatScreen(userData: user.data));
       }
     }
@@ -526,13 +621,16 @@ Future<void> saveOneSignalPlayerId() async {
     print(OneSignal.User.pushSubscription.token);
     print(state.current.jsonRepresentation());
 
-    if (OneSignal.User.pushSubscription.id.validate().isNotEmpty) await sharedPref.setString(PLAYER_ID, OneSignal.User.pushSubscription.id.validate());
+    if (OneSignal.User.pushSubscription.id.validate().isNotEmpty)
+      await sharedPref.setString(
+          PLAYER_ID, OneSignal.User.pushSubscription.id.validate());
   });
 }
 
 class MyBehavior extends ScrollBehavior {
   @override
-  Widget buildOverscrollIndicator(BuildContext context, Widget child, ScrollableDetails details) {
+  Widget buildOverscrollIndicator(
+      BuildContext context, Widget child, ScrollableDetails details) {
     return child;
   }
 }

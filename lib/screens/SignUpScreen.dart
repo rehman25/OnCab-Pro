@@ -217,8 +217,8 @@ class SignUpScreenState extends State<SignUpScreen> {
                       ? StepState.disabled
                       : StepState.complete,
                   stepStyle: StepStyle(
-                    color: Colors.amber,
                     connectorColor: Colors.amber,
+                    color: Colors.amber,
                     indexStyle: const TextStyle(
                       color: Colors.black,
                     ),
