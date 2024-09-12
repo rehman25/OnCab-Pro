@@ -34,7 +34,7 @@ class _DrawerComponentState extends State<DrawerComponent> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: Color(0xFF000000),
+      backgroundColor: Color(0xFFffffff),
       child: SingleChildScrollView(
         padding: EdgeInsets.all(16),
         child: Column(
@@ -69,11 +69,11 @@ class _DrawerComponentState extends State<DrawerComponent> {
                                       .getString(LAST_NAME)
                                       .validate()
                                       .capitalizeFirstLetter(),
-                              style: boldTextStyle(color: Color(0xFFCAA928))),
+                              style: boldTextStyle(color: Color(0xFF00155f))),
                           SizedBox(height: 4),
                           Text(appStore.userEmail,
                               style:
-                                  secondaryTextStyle(color: Color(0xFFCAA928))),
+                                  secondaryTextStyle(color: Color(0xFF00155f))),
                         ],
                       ),
                     ),
@@ -85,7 +85,7 @@ class _DrawerComponentState extends State<DrawerComponent> {
             DrawerWidget(
                 title: language.profile,
                 iconData: ic_my_profile,
-                icon: FontAwesome.user_o,
+                icon: FontAwesome.user_circle,
                 onTap: () {
                   Navigator.pop(context);
                   launchScreen(context, EditProfileScreen(),

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:country_code_picker/country_code_picker.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
@@ -50,6 +51,8 @@ class SignInScreenState extends State<SignInScreen> {
   bool mIsCheck = false;
   bool isAcceptedTc = false;
   String? privacyPolicy;
+  String countryCode = defaultCountryCode;
+
   String? termsCondition;
 
   @override
@@ -67,7 +70,7 @@ class SignInScreenState extends State<SignInScreen> {
     }
     mIsCheck = sharedPref.getBool(REMEMBER_ME) ?? false;
     if (mIsCheck) {
-      emailController.text = sharedPref.getString(USER_EMAIL).validate();
+      emailController.text = sharedPref.getString(CONTACT_NUMBER).validate();
       passController.text = sharedPref.getString(USER_PASSWORD).validate();
     }
   }
@@ -80,14 +83,15 @@ class SignInScreenState extends State<SignInScreen> {
         appStore.setLoading(true);
 
         Map req = {
-          'contact_number': emailController.text.trim(),
+          'contact_number': '$countryCode${emailController.text.trim()}',
           'password': passController.text.trim(),
           "player_id": sharedPref.getString(PLAYER_ID).validate(),
           'user_type': DRIVER,
         };
+        print('$req kamal');
         if (mIsCheck) {
           await sharedPref.setBool(REMEMBER_ME, mIsCheck);
-          await sharedPref.setString(USER_EMAIL, emailController.text);
+          await sharedPref.setString(CONTACT_NUMBER, emailController.text);
           await sharedPref.setString(USER_PASSWORD, passController.text);
         }
         await logInApi(req).then((value) async {
@@ -232,13 +236,60 @@ class SignInScreenState extends State<SignInScreen> {
                   SizedBox(height: 40),
                   AppTextField(
                     controller: emailController,
-                    nextFocus: passFocus,
-                    autoFocus: false,
                     textFieldType: TextFieldType.PHONE,
-                    keyboardType: TextInputType.phone,
-                    errorThisFieldRequired: language.thisFieldRequired,
-                    decoration:
-                        inputDecoration(context, label: language.phoneNumber),
+                    focus: emailFocus,
+                    nextFocus: passFocus,
+                    decoration: inputDecoration(
+                      context,
+                      label: language.phoneNumber,
+                      prefixIcon: IntrinsicHeight(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            CountryCodePicker(
+                              padding: EdgeInsets.zero,
+                              initialSelection: countryCode,
+                              showCountryOnly: false,
+                              dialogSize: Size(
+                                  MediaQuery.of(context).size.width - 60,
+                                  MediaQuery.of(context).size.height * 0.6),
+                              showFlag: true,
+                              showFlagDialog: true,
+                              showOnlyCountryWhenClosed: false,
+                              alignLeft: false,
+                              textStyle: primaryTextStyle(),
+                              dialogBackgroundColor:
+                                  Theme.of(context).cardColor,
+                              barrierColor: Colors.black12,
+                              dialogTextStyle: primaryTextStyle(),
+                              searchDecoration: InputDecoration(
+                                iconColor: Theme.of(context).dividerColor,
+                                enabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Theme.of(context).dividerColor)),
+                                focusedBorder: UnderlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: primaryColor)),
+                              ),
+                              searchStyle: primaryTextStyle(),
+                              onInit: (c) {
+                                countryCode = c!.dialCode!;
+                              },
+                              onChanged: (c) {
+                                countryCode = c.dialCode!;
+                              },
+                            ),
+                            VerticalDivider(
+                                color: Colors.grey.withOpacity(0.5)),
+                          ],
+                        ),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value!.trim().isEmpty)
+                        return language.thisFieldRequired;
+                      return null;
+                    },
                   ),
                   SizedBox(height: 16),
                   AppTextField(
@@ -274,7 +325,7 @@ class SignInScreenState extends State<SignInScreen> {
                                   await sharedPref.setBool(
                                       REMEMBER_ME, mIsCheck);
                                   await sharedPref.setString(
-                                      USER_EMAIL, emailController.text);
+                                      CONTACT_NUMBER, emailController.text);
                                   await sharedPref.setString(
                                       USER_PASSWORD, passController.text);
                                 }

@@ -718,6 +718,115 @@ class DashboardScreenState extends State<DashboardScreen> {
     super.dispose();
   }
 
+  final String _mapStyle = '''
+[
+  {
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#e6e6e6" // Dark blue background for all geometry
+      }
+    ]
+  },
+  {
+    "elementType": "labels.icon",
+    "stylers": [
+      {
+        "visibility": "on"
+      }
+    ]
+  },
+  {
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#000000" // Black text labels
+      }
+    ]
+  },
+  {
+    "elementType": "labels.text.stroke",
+    "stylers": [
+      {
+        "color": "#FFFFFF" // White text stroke for better readability
+      }
+    ]
+  },
+  {
+    "featureType": "road",
+    "elementType": "geometry.fill",
+    "stylers": [
+      {
+        "color": "#FFFFFF" // White roads for better contrast
+      }
+    ]
+  },
+  {
+    "featureType": "road.arterial",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#F0B27A" // Lighter color for arterial roads
+      }
+    ]
+  },
+  {
+    "featureType": "road.local",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#FFFFFF" // Red color for local roads
+      }
+    ]
+  },
+  {
+    "featureType": "water",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#00A8FF" // Bright blue water
+      }
+    ]
+  },
+  {
+    "featureType": "poi.park",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#2ECC71" // Green parks
+      }
+    ]
+  },
+  {
+    "featureType": "administrative",
+    "elementType": "geometry.stroke",
+    "stylers": [
+      {
+        "color": "#7D3C98" // Purple administrative borders
+      }
+    ]
+  },
+  {
+    "featureType": "transit.line",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#34495E" // Dark transit lines
+      }
+    ]
+  },
+  {
+    "featureType": "poi.business",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "visibility": "off" // Hide business points of interest
+      }
+    ]
+  }
+]
+''';
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -744,9 +853,9 @@ class DashboardScreenState extends State<DashboardScreen> {
                 mapToolbarEnabled: true,
                 buildingsEnabled: true,
                 trafficEnabled: true,
-                zoomControlsEnabled: true,
+                // zoomControlsEnabled: true,
                 indoorViewEnabled: true,
-                myLocationEnabled: true,
+                // myLocationEnabled: true,
                 onMapCreated: onMapCreated,
                 initialCameraPosition: CameraPosition(
                   target: driverLocation ??
@@ -754,6 +863,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                           sharedPref.getDouble(LONGITUDE)!),
                   zoom: 17.0,
                 ),
+                style: _mapStyle,
                 markers: markers,
                 mapType: MapType.normal,
                 polylines: _polyLines,
@@ -1165,6 +1275,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                                           List<ExtraChargeRequestModel>?
                                               extraChargeListData =
                                               await showModalBottomSheet(
+                                            backgroundColor: Colors.white,
                                             isScrollControlled: true,
                                             shape: RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.only(
@@ -1416,16 +1527,16 @@ class DashboardScreenState extends State<DashboardScreen> {
           child: Container(
             padding: EdgeInsets.all(4),
             decoration: BoxDecoration(
-              color: Color(0xFF000000),
+              color: Color(0xFFffffff),
               boxShadow: [
                 BoxShadow(
-                    color: Color(0xFFCAA928).withOpacity(0.2), spreadRadius: 1),
+                    color: Color(0xFF00155f).withOpacity(0.2), spreadRadius: 1),
               ],
               borderRadius: BorderRadius.circular(defaultRadius),
             ),
             child: Icon(
-              Icons.drag_handle,
-              color: Color(0xFFCAA928),
+              Icons.menu_rounded,
+              color: Color(0xFF00155f),
             ),
           ),
         ),
@@ -1434,10 +1545,10 @@ class DashboardScreenState extends State<DashboardScreen> {
           child: Container(
             padding: EdgeInsets.all(5),
             decoration: BoxDecoration(
-              color: Color(0xFF000000),
+              color: Color(0xFFffffff),
               boxShadow: [
                 BoxShadow(
-                    color: Color(0xFFCAA928).withOpacity(0.2), spreadRadius: 1),
+                    color: Color(0xFF00155f).withOpacity(0.2), spreadRadius: 1),
               ],
               borderRadius: BorderRadius.circular(defaultRadius),
             ),
@@ -1457,7 +1568,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                     isOffLine
                         ? language.youAreOnlineNow
                         : language.youAreOfflineNow,
-                    style: secondaryTextStyle(color: Color(0xFFCAA928))),
+                    style: secondaryTextStyle(color: Color(0xFF00155f))),
               ],
             ),
           ),
@@ -1470,16 +1581,16 @@ class DashboardScreenState extends State<DashboardScreen> {
           child: Container(
             padding: EdgeInsets.all(4),
             decoration: BoxDecoration(
-              color: Color(0xFF000000),
+              color: Color(0xFFffffff),
               boxShadow: [
                 BoxShadow(
-                    color: Color(0xFFCAA928).withOpacity(0.2), spreadRadius: 1),
+                    color: Color(0xFF00155f).withOpacity(0.2), spreadRadius: 1),
               ],
               borderRadius: BorderRadius.circular(defaultRadius),
             ),
             child: Icon(
-              Ionicons.notifications_outline,
-              color: Color(0xFFCAA928),
+              Ionicons.notifications_circle,
+              color: Color(0xFF00155f),
             ),
           ),
         ),
@@ -1502,16 +1613,16 @@ class DashboardScreenState extends State<DashboardScreen> {
         inactiveText: language.offLine,
         activeText: language.online,
         showOnOff: true,
-        activeTextColor: Color(0xFFCAA928),
-        inactiveTextColor: Color(0xFFCAA928),
+        activeTextColor: Color(0xFF00155f),
+        inactiveTextColor: Color(0xFF00155f),
         activeIcon: ImageIcon(AssetImage(ic_green_car),
-            color: Color(0xFFCAA928), size: 38),
+            color: Color(0xFF00155f), size: 38),
         inactiveIcon: ImageIcon(AssetImage(ic_red_car),
-            color: Color(0xFFCAA928), size: 40),
-        activeColor: Color(0xFF000000),
+            color: Color(0xFF00155f), size: 40),
+        activeColor: Color(0xFFffffff),
         activeToggleColor: Colors.green,
         inactiveToggleColor: Colors.red,
-        inactiveColor: Color(0xFF000000),
+        inactiveColor: Color(0xFFffffff),
         onToggle: (value) async {
           await showConfirmDialogCustom(
               dialogType: DialogType.CONFIRMATION,

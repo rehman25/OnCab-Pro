@@ -203,27 +203,35 @@ class _BottomScreenState extends State<BottomScreen> {
               ],
             ),
             child: BottomNavigationBar(
+              selectedLabelStyle: TextStyle(
+                fontWeight:
+                    FontWeight.bold, // Font weight for the selected item
+              ),
+              unselectedLabelStyle: TextStyle(
+                fontWeight:
+                    FontWeight.normal, // Font weight for unselected items
+              ),
               items: const <BottomNavigationBarItem>[
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.account_balance_wallet),
+                  icon: Icon(Icons.wallet),
                   label: 'Wallet',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.home),
+                  icon: Icon(Icons.home_max),
                   label: 'Home',
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(
-                    Icons.car_rental,
+                    Icons.list,
                     size: 30,
                   ),
                   label: 'Rides',
                 ),
               ],
               currentIndex: _selectedIndex,
-              selectedItemColor: Color(0xFF000000),
+              selectedItemColor: Color(0xFF00155f),
               unselectedItemColor: Color.fromARGB(231, 196, 195, 195),
-              selectedIconTheme: IconThemeData(color: Color(0xFF000000)),
+              selectedIconTheme: IconThemeData(color: Color(0xFF00155f)),
               unselectedIconTheme:
                   IconThemeData(color: Color.fromARGB(231, 196, 195, 195)),
               onTap: _onItemTapped,

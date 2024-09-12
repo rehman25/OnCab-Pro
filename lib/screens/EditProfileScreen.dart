@@ -228,6 +228,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                             child: IconButton(
                               onPressed: () {
                                 showModalBottomSheet(
+                                  backgroundColor: Colors.white,
                                   context: context,
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.only(

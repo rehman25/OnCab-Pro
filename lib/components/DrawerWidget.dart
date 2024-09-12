@@ -41,13 +41,15 @@ class DrawerWidgetState extends State<DrawerWidget> {
                   decoration: BoxDecoration(
                       // border: Border.all(color: Color(0xFFfcde16)),
                       borderRadius: radius(defaultRadius)),
-                  child: Image.asset(widget.iconData,
-                      height: 38, width: 38, color: Color(0xFFCAA928)),
+                  child: Image.asset(
+                    widget.iconData,
+                    width: 38,
+                  ),
                 ),
                 SizedBox(width: 14),
                 Expanded(
                   child: Text(widget.title,
-                      style: boldTextStyle(color: Color(0xFFCAA928))),
+                      style: boldTextStyle(color: Color(0xFF00155f))),
                 ),
                 // Icon(Icons.arrow_forward_ios, size: 16, color: Colors.red)
               ],

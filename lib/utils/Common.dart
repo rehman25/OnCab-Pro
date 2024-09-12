@@ -64,7 +64,7 @@ InputDecoration inputDecoration(BuildContext context,
         borderSide: BorderSide(color: dividerColor)),
     focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(defaultRadius),
-        borderSide: BorderSide(color: Color(0xFFCAA928))),
+        borderSide: BorderSide(color: Color(0xFF00155f))),
     enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(defaultRadius),
         borderSide: BorderSide(color: dividerColor)),
