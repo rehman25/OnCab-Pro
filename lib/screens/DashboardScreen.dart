@@ -10,9 +10,11 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:http/http.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taxi_driver/screens/ChatScreen.dart';
 import 'package:taxi_driver/screens/DetailScreen.dart';
 import 'package:taxi_driver/screens/ReviewScreen.dart';
@@ -55,7 +57,8 @@ class DashboardScreenState extends State<DashboardScreen> {
 
   List<RiderModel> riderList = [];
   OnRideRequest? servicesListData;
-
+  // List<OnRideRequest> rideRequests = [];
+  List<OnRideRequest?> rideRequestsList = [];
   UserData? riderData;
   WalletDetailModel? walletDetailModel;
 
@@ -97,10 +100,10 @@ class DashboardScreenState extends State<DashboardScreen> {
   void initState() {
     super.initState();
     locationPermission();
-    // Geolocator.getPositionStream().listen((event) {
-    //   driverLocation = LatLng(event.latitude, event.longitude);
-    //   setState(() {});
-    // });
+    Geolocator.getPositionStream().listen((event) {
+      driverLocation = LatLng(event.latitude, event.longitude);
+      setState(() {});
+    });
     init();
     if (sharedPref.getInt(IS_ONLINE) == 1) {
       isOffLine = true;
@@ -154,6 +157,16 @@ class DashboardScreenState extends State<DashboardScreen> {
     });
   }
 
+  // Future<void> testTing() async {
+  //   if (rideRequests.isNotEmpty) {
+  //     rideRequests.forEach((request) {
+  //       print('${request} requesteee ');
+  //     });
+  //   } else {
+  //     print('No ride requests available.');
+  //   }
+  // }
+
   Future<void> locationPermission() async {
     serviceStatusStream =
         Geolocator.getServiceStatusStream().listen((ServiceStatus status) {
@@ -185,12 +198,12 @@ class DashboardScreenState extends State<DashboardScreen> {
         if (sharedPref.getString(ON_RIDE_MODEL) != null) {
           servicesListData = OnRideRequest.fromJson(
               jsonDecode(sharedPref.getString(ON_RIDE_MODEL)!));
+          rideRequestsList.add(servicesListData);
           setState(() {});
         }
-
         startTimer();
       } else {
-        //timerData!.cancel();
+        timerData!.cancel();
         sharedPref.remove(IS_TIME2);
         duration = startTime;
         setState(() {});
@@ -217,9 +230,13 @@ class DashboardScreenState extends State<DashboardScreen> {
             Map req = {
               "id": riderId,
             };
-            rideRequestResPond(request: req)
-                .then((value) {})
-                .catchError((error) {
+            rideRequestResPond(request: req).then((value) {
+              if (value.status == 200) {
+                setState(() {
+                  print("RideChecking");
+                });
+              }
+            }).catchError((error) {
               log(error.toString());
             });
           });
@@ -325,10 +342,9 @@ class DashboardScreenState extends State<DashboardScreen> {
       if (value.onRideRequest != null) {
         appStore.currentRiderRequest = value.onRideRequest;
         servicesListData = value.onRideRequest;
+        rideRequestsList.add(servicesListData);
         print('${servicesListData} checked');
-
         userDetail(driverId: value.onRideRequest!.riderId);
-
         setState(() {});
 
         if (servicesListData != null) {
@@ -340,6 +356,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                     rideId: value.onRideRequest!.id!, currentData: value),
                 pageRouteAnimation: PageRouteAnimation.Slide,
                 isNewTask: true);
+            print('${servicesListData} checked2');
           } else if (value.payment != null &&
               value.payment!.paymentStatus == PENDING) {
             launchScreen(context, DetailScreen(),
@@ -350,6 +367,7 @@ class DashboardScreenState extends State<DashboardScreen> {
         if (value.payment != null && value.payment!.paymentStatus == PENDING) {
           launchScreen(context, DetailScreen(),
               pageRouteAnimation: PageRouteAnimation.Slide, isNewTask: true);
+          print('${servicesListData} checked3');
         }
       }
       await changeStatus();
@@ -375,6 +393,7 @@ class DashboardScreenState extends State<DashboardScreen> {
       getCurrentRequest().then((value) async {
         _polyLines.clear();
         setMapPins();
+
         setState(() {});
       });
     }).catchError((error) {
@@ -457,7 +476,7 @@ class DashboardScreenState extends State<DashboardScreen> {
       _polyLines.add(
         Polyline(
           visible: true,
-          width: 10,
+          width: 5,
           polylineId: PolylineId('poly'),
           color: Colors.blue,
           points: polylineCoordinates,
@@ -604,19 +623,27 @@ class DashboardScreenState extends State<DashboardScreen> {
       debugPrint('connected');
     }
 
-    client.subscribe(
-        mMQTT_UNIQUE_TOPIC_NAME +
-            'new_ride_request_' +
-            sharedPref.getInt(USER_ID).toString(),
-        MqttQos.atLeastOnce);
+    if (client.subscriptionsManager?.subscriptions.containsKey(
+            mMQTT_UNIQUE_TOPIC_NAME +
+                'new_ride_request_' +
+                sharedPref.getInt(USER_ID).toString()) ??
+        false) {
+      log("checkingMqtt: ${servicesListData!.id}");
+    } else {
+      client.subscribe(
+          mMQTT_UNIQUE_TOPIC_NAME +
+              'new_ride_request_' +
+              sharedPref.getInt(USER_ID).toString(),
+          MqttQos.atLeastOnce);
+    }
     debugPrint(
         'check ${mMQTT_UNIQUE_TOPIC_NAME + 'new_ride_request_' + sharedPref.getInt(USER_ID).toString()}');
 
-    client.subscribe(
-        mMQTT_UNIQUE_TOPIC_NAME +
-            'ride_request_status_' +
-            sharedPref.getInt(USER_ID).toString(),
-        MqttQos.atLeastOnce);
+    // client.subscribe(
+    //     mMQTT_UNIQUE_TOPIC_NAME +
+    //         'ride_request_status_' +
+    //         sharedPref.getInt(USER_ID).toString(),
+    //     MqttQos.atLeastOnce);
     client.updates!.listen((List<MqttReceivedMessage<MqttMessage?>>? c) async {
       debugPrint('${c} listeningasd');
       final MqttPublishMessage recMess = c![0].payload as MqttPublishMessage;
@@ -634,9 +661,17 @@ class DashboardScreenState extends State<DashboardScreen> {
           asAlarm: false,
         );
         servicesListData = OnRideRequest.fromJson(jsonDecode(pt)['result']);
-        debugPrint('${servicesListData} kkill');
+        // rideRequestsList.add(servicesListData);
+        if (!rideRequestsList
+            .any((request) => request!.id == servicesListData!.id)) {
+          rideRequestsList.add(servicesListData);
+          sharedPref.setString(ON_RIDE_MODEL, jsonEncode(servicesListData));
+        } else {
+          log("RequestChecking: ${servicesListData!.id}");
+        }
+        // debugPrint('${servicesListData} kkill');
 
-        sharedPref.setString(ON_RIDE_MODEL, jsonEncode(servicesListData));
+        // sharedPref.setString(ON_RIDE_MODEL, jsonEncode(servicesListData));
         riderId = servicesListData!.id!;
         sharedPref.remove(IS_TIME2);
         setTimeData();
@@ -645,7 +680,7 @@ class DashboardScreenState extends State<DashboardScreen> {
         FlutterRingtonePlayer().stop();
         sharedPref.remove(ON_RIDE_MODEL);
         sharedPref.remove(IS_TIME2);
-        servicesListData = null;
+        rideRequestsList = [];
         if (timerData != null) timerData!.cancel();
         _polyLines.clear();
         setMapPins();
@@ -710,11 +745,11 @@ class DashboardScreenState extends State<DashboardScreen> {
   void dispose() {
     if (timerData != null) {
       timerData!.cancel();
-    }
-    if (timerData == null) {
-      sharedPref.getString(IS_TIME2);
-    }
-    FlutterRingtonePlayer().stop();
+    } else
+      (sharedPref.getString(IS_TIME2), FlutterRingtonePlayer().stop());
+    // if (timerData == null) {
+    //   sharedPref.getString(IS_TIME2);
+    // }
     super.dispose();
   }
 
@@ -882,9 +917,10 @@ class DashboardScreenState extends State<DashboardScreen> {
                                 BuildContext context,
                                 ScrollController scrollController,
                               ) {
-                                scrollController.addListener(() {
-                                  //
-                                });
+                                // print('$servicesListData.length rideer');
+                                // scrollController.addListener(() {
+
+                                // });
                                 return servicesListData != null
                                     ? Container(
                                         decoration: BoxDecoration(
@@ -896,242 +932,277 @@ class DashboardScreenState extends State<DashboardScreen> {
                                                   defaultRadius)),
                                         ),
                                         child: SingleChildScrollView(
-                                          controller: scrollController,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Align(
-                                                alignment: Alignment.center,
-                                                child: Container(
-                                                  margin:
-                                                      EdgeInsets.only(top: 16),
-                                                  height: 6,
-                                                  width: 60,
-                                                  decoration: BoxDecoration(
+                                            controller: scrollController,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Align(
+                                                  alignment: Alignment.center,
+                                                  child: Container(
+                                                    margin: EdgeInsets.only(
+                                                        top: 16),
+                                                    height: 6,
+                                                    width: 60,
+                                                    decoration: BoxDecoration(
                                                       color: primaryColor,
                                                       borderRadius:
                                                           BorderRadius.circular(
-                                                              defaultRadius)),
-                                                  alignment: Alignment.center,
-                                                ),
-                                              ),
-                                              SizedBox(height: 8),
-                                              Padding(
-                                                padding:
-                                                    EdgeInsets.only(left: 16),
-                                                child: Text(language.requests,
-                                                    style: primaryTextStyle(
-                                                        size: 18)),
-                                              ),
-                                              SizedBox(height: 8),
-                                              Padding(
-                                                padding: EdgeInsets.all(16),
-                                                child: Column(
-                                                  children: [
-                                                    Row(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        ClipRRect(
-                                                          borderRadius:
-                                                              BorderRadius.circular(
-                                                                  defaultRadius),
-                                                          child: commonCachedNetworkImage(
-                                                              servicesListData!
-                                                                  .riderProfileImage
-                                                                  .validate(),
-                                                              height: 35,
-                                                              width: 35,
-                                                              fit:
-                                                                  BoxFit.cover),
-                                                        ),
-                                                        SizedBox(width: 12),
-                                                        Expanded(
-                                                          child: Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              Text(
-                                                                  '${servicesListData!.riderName}',
-                                                                  style: boldTextStyle(
-                                                                      size:
-                                                                          14)),
-                                                              SizedBox(
-                                                                  height: 4),
-                                                              Text(
-                                                                  '${servicesListData!.riderEmail.validate()}',
-                                                                  style:
-                                                                      secondaryTextStyle()),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                        Container(
-                                                          decoration: BoxDecoration(
-                                                              color:
-                                                                  primaryColor,
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          defaultRadius)),
-                                                          padding:
-                                                              EdgeInsets.all(6),
-                                                          child: Text(
-                                                              "$duration",
-                                                              style: boldTextStyle(
-                                                                  color: Colors
-                                                                      .white)),
-                                                        ),
-                                                      ],
+                                                              defaultRadius),
                                                     ),
-                                                    SizedBox(height: 12),
-                                                    addressDisplayWidget(
-                                                        endLatLong: LatLng(
-                                                            servicesListData!
-                                                                .endLatitude
-                                                                .toDouble(),
-                                                            servicesListData!
-                                                                .endLongitude
-                                                                .toDouble()),
-                                                        endAddress:
-                                                            servicesListData!
-                                                                .endAddress,
-                                                        startLatLong: LatLng(
-                                                            servicesListData!
-                                                                .startLatitude
-                                                                .toDouble(),
-                                                            servicesListData!
-                                                                .startLongitude
-                                                                .toDouble()),
-                                                        startAddress:
-                                                            servicesListData!
-                                                                .startAddress),
-                                                    SizedBox(height: 12),
-                                                    Row(
-                                                      children: [
-                                                        Expanded(
-                                                          child: inkWellWidget(
-                                                            onTap: () {
-                                                              showConfirmDialogCustom(
-                                                                  dialogType:
-                                                                      DialogType
-                                                                          .DELETE,
-                                                                  primaryColor:
-                                                                      primaryColor,
-                                                                  title: language
-                                                                      .areYouSureYouWantToCancelThisRequest,
-                                                                  positiveText:
-                                                                      language
-                                                                          .yes,
-                                                                  negativeText:
-                                                                      language
-                                                                          .no,
-                                                                  context,
-                                                                  onAccept:
-                                                                      (v) {
-                                                                timerData!
-                                                                    .cancel();
-                                                                FlutterRingtonePlayer()
-                                                                    .stop();
-                                                                sharedPref.remove(
-                                                                    ON_RIDE_MODEL);
-                                                                sharedPref.remove(
-                                                                    IS_TIME2);
-                                                                rideRequestAccept(
-                                                                    deCline:
-                                                                        true);
-                                                              });
-                                                            },
-                                                            child: Container(
-                                                              padding: EdgeInsets
-                                                                  .symmetric(
-                                                                      vertical:
-                                                                          10,
-                                                                      horizontal:
-                                                                          8),
-                                                              decoration: BoxDecoration(
+                                                    alignment: Alignment.center,
+                                                  ),
+                                                ),
+                                                SizedBox(height: 8),
+                                                Padding(
+                                                  padding:
+                                                      EdgeInsets.only(left: 16),
+                                                  child: Text(
+                                                    language.requests,
+                                                    style: primaryTextStyle(
+                                                        size: 18),
+                                                  ),
+                                                ),
+                                                SizedBox(height: 8),
+                                                Padding(
+                                                  padding: EdgeInsets.all(16),
+                                                  child: ListView.builder(
+                                                    shrinkWrap: true,
+                                                    itemCount: rideRequestsList
+                                                        .length, // Use your actual list length here
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      var currentService =
+                                                          rideRequestsList[
+                                                              index]; // Use the index to get the current item
+                                                      return Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                vertical: 8),
+                                                        child: Column(
+                                                          children: [
+                                                            Row(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                ClipRRect(
                                                                   borderRadius:
                                                                       BorderRadius
                                                                           .circular(
                                                                               defaultRadius),
-                                                                  border: Border.all(
-                                                                      color: Colors
-                                                                          .red)),
-                                                              child: Text(
-                                                                  language
-                                                                      .decline,
-                                                                  style: boldTextStyle(
-                                                                      color: Colors
-                                                                          .red),
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center),
+                                                                  child:
+                                                                      commonCachedNetworkImage(
+                                                                    currentService!
+                                                                        .riderProfileImage
+                                                                        .validate(),
+                                                                    height: 35,
+                                                                    width: 35,
+                                                                    fit: BoxFit
+                                                                        .cover,
+                                                                  ),
+                                                                ),
+                                                                SizedBox(
+                                                                    width: 12),
+                                                                Expanded(
+                                                                  child: Column(
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .start,
+                                                                    children: [
+                                                                      Text(
+                                                                        '${currentService.riderName}',
+                                                                        style: boldTextStyle(
+                                                                            size:
+                                                                                14),
+                                                                      ),
+                                                                      SizedBox(
+                                                                          height:
+                                                                              4),
+                                                                      Text(
+                                                                        '${currentService.riderEmail.validate()}',
+                                                                        style:
+                                                                            secondaryTextStyle(),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                                Container(
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    color:
+                                                                        primaryColor,
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            defaultRadius),
+                                                                  ),
+                                                                  padding:
+                                                                      EdgeInsets
+                                                                          .all(
+                                                                              6),
+                                                                  child: Text(
+                                                                    "$duration", // Set your actual duration here
+                                                                    style: boldTextStyle(
+                                                                        color: Colors
+                                                                            .white),
+                                                                  ),
+                                                                ),
+                                                              ],
                                                             ),
-                                                          ),
+                                                            SizedBox(
+                                                                height: 12),
+                                                            addressDisplayWidget(
+                                                              endLatLong:
+                                                                  LatLng(
+                                                                currentService
+                                                                    .endLatitude
+                                                                    .toDouble(),
+                                                                currentService
+                                                                    .endLongitude
+                                                                    .toDouble(),
+                                                              ),
+                                                              endAddress:
+                                                                  currentService
+                                                                      .endAddress,
+                                                              startLatLong:
+                                                                  LatLng(
+                                                                currentService
+                                                                    .startLatitude
+                                                                    .toDouble(),
+                                                                currentService
+                                                                    .startLongitude
+                                                                    .toDouble(),
+                                                              ),
+                                                              startAddress:
+                                                                  currentService
+                                                                      .startAddress,
+                                                            ),
+                                                            SizedBox(
+                                                                height: 12),
+                                                            Row(
+                                                              children: [
+                                                                Expanded(
+                                                                  child:
+                                                                      inkWellWidget(
+                                                                    onTap: () {
+                                                                      showConfirmDialogCustom(
+                                                                        dialogType:
+                                                                            DialogType.DELETE,
+                                                                        primaryColor:
+                                                                            primaryColor,
+                                                                        title: language
+                                                                            .areYouSureYouWantToCancelThisRequest,
+                                                                        positiveText:
+                                                                            language.yes,
+                                                                        negativeText:
+                                                                            language.no,
+                                                                        context,
+                                                                        onAccept:
+                                                                            (v) {
+                                                                          timerData!
+                                                                              .cancel();
+                                                                          FlutterRingtonePlayer()
+                                                                              .stop();
+                                                                          sharedPref
+                                                                              .remove(ON_RIDE_MODEL);
+                                                                          sharedPref
+                                                                              .remove(IS_TIME2);
+                                                                          rideRequestAccept(
+                                                                              deCline: true);
+                                                                        },
+                                                                      );
+                                                                    },
+                                                                    child:
+                                                                        Container(
+                                                                      padding: EdgeInsets.symmetric(
+                                                                          vertical:
+                                                                              10,
+                                                                          horizontal:
+                                                                              8),
+                                                                      decoration:
+                                                                          BoxDecoration(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(defaultRadius),
+                                                                        border: Border.all(
+                                                                            color:
+                                                                                Colors.red),
+                                                                      ),
+                                                                      child:
+                                                                          Text(
+                                                                        language
+                                                                            .decline,
+                                                                        style: boldTextStyle(
+                                                                            color:
+                                                                                Colors.red),
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                SizedBox(
+                                                                    width: 16),
+                                                                Expanded(
+                                                                  child:
+                                                                      AppButtonWidget(
+                                                                    padding: EdgeInsets.symmetric(
+                                                                        vertical:
+                                                                            12,
+                                                                        horizontal:
+                                                                            8),
+                                                                    text: language
+                                                                        .accept,
+                                                                    shapeBorder:
+                                                                        RoundedRectangleBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              defaultRadius),
+                                                                    ),
+                                                                    color:
+                                                                        primaryColor,
+                                                                    textStyle: boldTextStyle(
+                                                                        color: Colors
+                                                                            .white),
+                                                                    onTap: () {
+                                                                      showConfirmDialogCustom(
+                                                                        primaryColor:
+                                                                            primaryColor,
+                                                                        dialogType:
+                                                                            DialogType.ACCEPT,
+                                                                        positiveText:
+                                                                            language.yes,
+                                                                        negativeText:
+                                                                            language.no,
+                                                                        title: language
+                                                                            .areYouSureYouWantToAcceptThisRequest,
+                                                                        context,
+                                                                        onAccept:
+                                                                            (v) {
+                                                                          timerData!
+                                                                              .cancel();
+                                                                          FlutterRingtonePlayer()
+                                                                              .stop();
+                                                                          sharedPref
+                                                                              .remove(IS_TIME2);
+                                                                          sharedPref
+                                                                              .remove(ON_RIDE_MODEL);
+                                                                          rideRequestAccept();
+                                                                        },
+                                                                      );
+                                                                    },
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ],
                                                         ),
-                                                        SizedBox(width: 16),
-                                                        Expanded(
-                                                          child:
-                                                              AppButtonWidget(
-                                                            padding: EdgeInsets
-                                                                .symmetric(
-                                                                    vertical:
-                                                                        12,
-                                                                    horizontal:
-                                                                        8),
-                                                            text:
-                                                                language.accept,
-                                                            shapeBorder: RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            defaultRadius)),
-                                                            color: primaryColor,
-                                                            textStyle:
-                                                                boldTextStyle(
-                                                                    color: Colors
-                                                                        .white),
-                                                            onTap: () {
-                                                              showConfirmDialogCustom(
-                                                                  primaryColor:
-                                                                      primaryColor,
-                                                                  dialogType:
-                                                                      DialogType
-                                                                          .ACCEPT,
-                                                                  positiveText:
-                                                                      language
-                                                                          .yes,
-                                                                  negativeText:
-                                                                      language
-                                                                          .no,
-                                                                  title: language
-                                                                      .areYouSureYouWantToAcceptThisRequest,
-                                                                  context,
-                                                                  onAccept:
-                                                                      (v) {
-                                                                timerData!
-                                                                    .cancel();
-                                                                FlutterRingtonePlayer()
-                                                                    .stop();
-                                                                sharedPref.remove(
-                                                                    IS_TIME2);
-                                                                sharedPref.remove(
-                                                                    ON_RIDE_MODEL);
-                                                                rideRequestAccept();
-                                                              });
-                                                            },
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    )
-                                                  ],
+                                                      );
+                                                    },
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
+                                              ],
+                                            )),
                                       )
                                     : SizedBox();
                               },
@@ -1360,148 +1431,6 @@ class DashboardScreenState extends State<DashboardScreen> {
               visible: appStore.isLoading,
               child: loaderWidget(),
             ),
-            // Positioned(
-            //   bottom: 0,
-            //   left: 0,
-            //   right: 0,
-            //   child: Container(
-            //     // color: Color(0xFFEAEAEA),
-            //     decoration: BoxDecoration(
-            //       borderRadius: BorderRadius.only(
-            //           topLeft: radiusCircular(12),
-            //           topRight: radiusCircular(12)),
-            //     ),
-            //     padding: EdgeInsets.all(5.0),
-            //     child: Row(
-            //       children: [
-            //         Expanded(
-            //           child: Container(
-            //             height: 100,
-            //             padding: EdgeInsets.all(2.0),
-            //             // color: Colors.green[50],
-            //             decoration: BoxDecoration(
-            //               color: Colors.red[300],
-            //               borderRadius: BorderRadius.circular(
-            //                   15), // Add border radius here
-            //               // boxShadow: [
-            //               //   BoxShadow(
-            //               //     color: Colors.black12,
-            //               //     spreadRadius: 5,
-            //               //     blurRadius: 10,
-            //               //     offset: Offset(0, 3), // changes position of shadow
-            //               //   ),
-            //               // ],
-            //             ),
-            //             child: Container(
-            //                 padding: EdgeInsets.all(5.0),
-            //                 child: Row(
-            //                   mainAxisAlignment: MainAxisAlignment.start,
-            //                   crossAxisAlignment: CrossAxisAlignment
-            //                       .start, // Align children in the center vertically
-            //                   children: [
-            //                     Container(
-            //                       margin: EdgeInsets.only(
-            //                           top: 5.0), // Add right margin to the icon
-            //                       child: Icon(
-            //                         Icons.info,
-            //                         size: 20,
-            //                       ),
-            //                     ),
-            //                     Text(
-            //                       "Pro",
-            //                       style: TextStyle(
-            //                         fontSize: 24,
-            //                         fontWeight: FontWeight.bold,
-            //                       ),
-            //                     ),
-            //                   ],
-            //                 )),
-            //           ),
-            //         ),
-            //         SizedBox(width: 8),
-            //         Expanded(
-            //           child: Container(
-            //             height: 100,
-            //             padding: EdgeInsets.all(2.0),
-            //             decoration: BoxDecoration(
-            //               color: Colors.green[300],
-            //               borderRadius: BorderRadius.circular(
-            //                   15), // Add border radius here
-            //               // boxShadow: [
-            //               //   BoxShadow(
-            //               //     color: Colors.black12,
-            //               //     spreadRadius: 5,
-            //               //     blurRadius: 10,
-            //               //     offset: Offset(0, 3), // changes position of shadow
-            //               //   ),
-            //               // ],
-            //             ),
-            //             child: Container(
-            //               child: Column(
-            //                 children: [
-            //                   Container(
-            //                     margin: EdgeInsets.only(top: 4.0),
-            //                     padding: EdgeInsets.only(left: 5.0),
-            //                     child: Row(
-            //                       children: [
-            //                         Icon(
-            //                           Icons.wallet,
-            //                           size: 20,
-            //                         ),
-            //                         SizedBox(width: 2),
-            //                         Text(
-            //                           "Earnings",
-            //                           style: TextStyle(
-            //                             fontSize: 24,
-            //                             fontWeight: FontWeight.bold,
-            //                           ),
-            //                         )
-            //                       ],
-            //                     ),
-            //                   ),
-            //                   Container(
-            //                     padding: EdgeInsets.only(right: 10.0, top: 20),
-            //                     child: Row(
-            //                       mainAxisAlignment: MainAxisAlignment.end,
-            //                       crossAxisAlignment: CrossAxisAlignment.end,
-            //                       children: [
-            //                         Container(
-            //                           child: Column(
-            //                             mainAxisAlignment:
-            //                                 MainAxisAlignment.start,
-            //                             crossAxisAlignment:
-            //                                 CrossAxisAlignment.start,
-            //                             children: [
-            //                               SizedBox(width: 2),
-            //                               Text(
-            //                                 "Trips 1",
-            //                                 style: TextStyle(
-            //                                   fontSize: 10,
-            //                                   fontWeight: FontWeight.bold,
-            //                                 ),
-            //                               ),
-            //                               Text(
-            //                                 "Rs:5000",
-            //                                 style: TextStyle(
-            //                                   fontSize: 16,
-            //                                   fontWeight: FontWeight.bold,
-            //                                 ),
-            //                               )
-            //                             ],
-            //                           ),
-            //                         )
-            //                       ],
-            //                     ),
-            //                   )
-            //                 ],
-            //               ),
-            //             ),
-            //           ),
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            // ),
           ],
         ),
       ),

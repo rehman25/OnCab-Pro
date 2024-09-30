@@ -14,7 +14,7 @@ import 'LanguageHy.dart';
 import 'LanguageId.dart';
 import 'LanguageJa.dart';
 import 'LanguageNl.dart';
-import 'LanguagePa.dart';
+// import 'LanguagePa.dart';
 import 'LanguagePt.dart';
 import 'LanguageRu.dart';
 import 'LanguageTa.dart';

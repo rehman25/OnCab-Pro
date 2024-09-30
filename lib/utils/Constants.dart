@@ -9,6 +9,8 @@ const mAppName = 'oncabdriver';
 //region DomainUrl
 const DOMAIN_URL =
     'https://admin.oncabglobal.com'; // Don't add slash at the end of the url
+// const DOMAIN_URL =
+//     'http://192.168.18.28:8000'; // Don't add slash at the end of the url
 //endregion
 
 //region Google map key

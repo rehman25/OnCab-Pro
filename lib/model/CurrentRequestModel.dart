@@ -43,9 +43,12 @@ class CurrentRequestModel {
     status = json['status'];
     latitude = json['latitude'];
     longitude = json['longitude'];
-    onRideRequest = json['on_ride_request'] != null ? new OnRideRequest.fromJson(json['on_ride_request']) : null;
+    onRideRequest = json['on_ride_request'] != null
+        ? new OnRideRequest.fromJson(json['on_ride_request'])
+        : null;
     rider = json['rider'] != null ? new UserData.fromJson(json['rider']) : null;
-    payment = json['payment'] != null ? new Payment.fromJson(json['payment']) : null;
+    payment =
+        json['payment'] != null ? new Payment.fromJson(json['payment']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -243,10 +246,13 @@ class OnRideRequest {
       });
     }
     couponDiscount = json['coupon_discount'];
-    couponData = json['coupon_data'] != null ? CouponData.fromJson(json['coupon_data']) : null;
+    couponData = json['coupon_data'] != null
+        ? CouponData.fromJson(json['coupon_data'])
+        : null;
     isRiderRated = json['is_rider_rated'];
     isDriverRated = json['is_driver_rated'];
-    maxTimeForFindDriverForRideRequest = json['max_time_for_find_driver_for_ride_request'];
+    maxTimeForFindDriverForRideRequest =
+        json['max_time_for_find_driver_for_ride_request'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     driverContactNumber = json['driver_contact_number'];
@@ -254,7 +260,9 @@ class OnRideRequest {
     riderEmail = json['rider_email'];
     driverEmail = json['driver_email'];
     regionId = json['region_id'];
-    otherRiderData = json['other_rider_data'] != null ? new OtherRiderData.fromJson(json['other_rider_data']) : null;
+    otherRiderData = json['other_rider_data'] != null
+        ? new OtherRiderData.fromJson(json['other_rider_data'])
+        : null;
     isRideForOther = json['is_ride_for_other'];
   }
 
@@ -303,14 +311,16 @@ class OnRideRequest {
     data['payment_type'] = this.paymentType;
     data['payment_status'] = this.paymentStatus;
     if (this.extraCharges != null) {
-      data['extra_charges'] = this.extraCharges!.map((v) => v.toJson()).toList();
+      data['extra_charges'] =
+          this.extraCharges!.map((v) => v.toJson()).toList();
     }
     data['coupon_discount'] = this.couponDiscount;
     data['coupon_code'] = this.couponCode;
     data['coupon_data'] = this.couponData;
     data['is_rider_rated'] = this.isRiderRated;
     data['is_driver_rated'] = this.isDriverRated;
-    data['max_time_for_find_driver_for_ride_request'] = this.maxTimeForFindDriverForRideRequest;
+    data['max_time_for_find_driver_for_ride_request'] =
+        this.maxTimeForFindDriverForRideRequest;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     if (this.couponData != null) {

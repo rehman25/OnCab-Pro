@@ -20,6 +20,8 @@ import '../utils/Extensions/ConformationDialog.dart';
 import '../utils/Images.dart';
 import 'DashboardScreen.dart';
 import 'package:file_picker/file_picker.dart';
+import '../model/TimerModal.dart';
+import 'BottomScreen.dart';
 
 class DocumentsScreen extends StatefulWidget {
   final bool isShow;
@@ -237,15 +239,27 @@ class DocumentsScreenState extends State<DocumentsScreen> {
         toast(language.someRequiredDocumentAreNotUploaded);
       } else {
         if (sharedPref.getInt(IS_Verified_Driver) == 1) {
-          launchScreen(context, DashboardScreen(),
+          launchScreen(context, BottomScreen(),
               isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
         } else {
-          toast('${language.userNotApproveMsg}');
+          showDialog(
+            context: context,
+            barrierDismissible: false, // Prevent dismissing the modal
+            builder: (context) => TimerModal(
+              duration: 24 * 60 * 60, // 24 hours in seconds
+              onVerified: () {
+                // Navigate to the BottomScreen when all documents are verified
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => BottomScreen()),
+                );
+              },
+            ),
+          );
         }
       }
     }).catchError((error) {
       appStore.setLoading(false);
-
       log(error.toString());
     });
   }

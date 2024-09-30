@@ -147,7 +147,7 @@ class SignInScreenState extends State<SignInScreen> {
                     pageRouteAnimation: PageRouteAnimation.Slide);
               }
             }
-            //toast(e.toString());
+            // toast(e.toString());
             log('${e.toString()}');
             log(e.toString());
           });
@@ -229,7 +229,7 @@ class SignInScreenState extends State<SignInScreen> {
                         TextSpan(
                             text: '${language.signcontinue}',
                             style: primaryTextStyle(size: 14)),
-                        TextSpan(text: '🚗', style: primaryTextStyle(size: 20)),
+                        // TextSpan(text: '🚗', style: primaryTextStyle(size: 20)),
                       ],
                     ),
                   ),

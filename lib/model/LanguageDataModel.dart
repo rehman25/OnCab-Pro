@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taxi_driver/language/LanguageEn.dart';
 import 'package:taxi_driver/utils/Extensions/StringExtensions.dart';
 
 import '../../main.dart';
@@ -35,7 +36,8 @@ class LanguageDataModel {
     List<Locale> list = [];
 
     localeLanguageList.forEach((element) {
-      list.add(Locale(element.languageCode.validate(), element.fullLanguageCode.validate()));
+      list.add(Locale(element.languageCode.validate(),
+          element.fullLanguageCode.validate()));
     });
 
     return list;
@@ -46,7 +48,8 @@ LanguageDataModel? getSelectedLanguageModel({String? defaultLanguage}) {
   LanguageDataModel? data;
 
   localeLanguageList.forEach((element) {
-    if (element.languageCode == (sharedPref.getString(SELECTED_LANGUAGE_CODE) ?? defaultLanguage)) {
+    if (element.languageCode ==
+        (sharedPref.getString(SELECTED_LANGUAGE_CODE) ?? defaultLanguage)) {
       data = element;
     }
   });

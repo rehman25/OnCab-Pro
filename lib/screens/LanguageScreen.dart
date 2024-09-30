@@ -21,20 +21,28 @@ class LanguageScreenState extends State<LanguageScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Filter to only include English and Urdu
+    List<LanguageDataModel> filteredLanguages = localeLanguageList
+        .where((language) =>
+            language.languageCode == 'en' || language.languageCode == 'ur')
+        .toList();
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(language.language, style: boldTextStyle(color: appTextPrimaryColorWhite)),
+        title: Text(language.language,
+            style: boldTextStyle(color: appTextPrimaryColorWhite)),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16),
         child: Wrap(
           runSpacing: 12,
           spacing: 12,
-          children: List.generate(localeLanguageList.length, (index) {
-            LanguageDataModel data = localeLanguageList[index];
+          children: List.generate(filteredLanguages.length, (index) {
+            LanguageDataModel data = filteredLanguages[index];
             return inkWellWidget(
               onTap: () async {
-                await sharedPref.setString(SELECTED_LANGUAGE_CODE, data.languageCode!);
+                await sharedPref.setString(
+                    SELECTED_LANGUAGE_CODE, data.languageCode!);
                 selectedLanguageDataModel = data;
                 appStore.setLanguage(data.languageCode!, context: context);
                 setState(() {});
@@ -44,7 +52,11 @@ class LanguageScreenState extends State<LanguageScreen> {
                 padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
                     border: Border.all(color: dividerColor),
-                    color: (sharedPref.getString(SELECTED_LANGUAGE_CODE) ?? defaultLanguage) == data.languageCode ? primaryColor.withOpacity(0.6) : Colors.transparent,
+                    color: (sharedPref.getString(SELECTED_LANGUAGE_CODE) ??
+                                defaultLanguage) ==
+                            data.languageCode
+                        ? primaryColor.withOpacity(0.6)
+                        : Colors.transparent,
                     borderRadius: radius(defaultRadius)),
                 width: (MediaQuery.of(context).size.width - 44) / 2,
                 child: Row(
@@ -52,20 +64,38 @@ class LanguageScreenState extends State<LanguageScreen> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    ClipRRect(borderRadius: radius(8), child: Image.asset(data.flag.validate(), width: 32, height: 32)),
+                    ClipRRect(
+                        borderRadius: radius(8),
+                        child: Image.asset(data.flag.validate(),
+                            width: 32, height: 32)),
                     SizedBox(width: 8),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text('${data.name.validate()}',
-                              style: boldTextStyle(color: (sharedPref.getString(SELECTED_LANGUAGE_CODE) ?? defaultLanguage) == data.languageCode ? Colors.white : textPrimaryColorGlobal)),
+                              style: boldTextStyle(
+                                  color: (sharedPref.getString(
+                                                  SELECTED_LANGUAGE_CODE) ??
+                                              defaultLanguage) ==
+                                          data.languageCode
+                                      ? Colors.white
+                                      : textPrimaryColorGlobal)),
                           Text('${data.subTitle.validate()}',
-                              style: secondaryTextStyle(color: (sharedPref.getString(SELECTED_LANGUAGE_CODE) ?? defaultLanguage) == data.languageCode ? Colors.white : textSecondaryColorGlobal)),
+                              style: secondaryTextStyle(
+                                  color: (sharedPref.getString(
+                                                  SELECTED_LANGUAGE_CODE) ??
+                                              defaultLanguage) ==
+                                          data.languageCode
+                                      ? Colors.white
+                                      : textSecondaryColorGlobal)),
                         ],
                       ),
                     ),
-                    if ((sharedPref.getString(SELECTED_LANGUAGE_CODE) ?? defaultLanguage) == data.languageCode) Icon(Icons.check_circle, color: Colors.white),
+                    if ((sharedPref.getString(SELECTED_LANGUAGE_CODE) ??
+                            defaultLanguage) ==
+                        data.languageCode)
+                      Icon(Icons.check_circle, color: Colors.white),
                   ],
                 ),
               ),

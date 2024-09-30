@@ -100,21 +100,20 @@ class SettingScreenState extends State<SettingScreen> {
                       sharedPref.getString(LOGIN_TYPE) != LoginTypeGoogle &&
                       sharedPref.getString(LOGIN_TYPE) != null,
                   child: settingItemWidget(
-                      Ionicons.ios_lock_closed_outline, language.changePassword,
+                      Ionicons.ios_lock_closed_sharp, language.changePassword,
                       () {
                     launchScreen(context, ChangePasswordScreen(),
                         pageRouteAnimation: PageRouteAnimation.Slide);
                   }),
                 ),
-                settingItemWidget(Ionicons.language_outline, language.language,
+                settingItemWidget(Ionicons.language_sharp, language.language,
                     () {
                   launchScreen(context, LanguageScreen(),
                       pageRouteAnimation: PageRouteAnimation.Slide);
                 }),
                 if (appStore.privacyPolicy != null)
                   settingItemWidget(
-                      Ionicons.ios_document_outline, language.privacyPolicy,
-                      () {
+                      Ionicons.ios_document_sharp, language.privacyPolicy, () {
                     if (appStore.privacyPolicy != null) {
                       launchScreen(
                           context,
@@ -150,7 +149,7 @@ class SettingScreenState extends State<SettingScreen> {
                     }
                   }),
                 settingItemWidget(
-                  Ionicons.information,
+                  Ionicons.ios_information_circle,
                   language.aboutUs,
                   () {
                     launchScreen(
@@ -159,14 +158,14 @@ class SettingScreenState extends State<SettingScreen> {
                   },
                 ),
                 settingItemWidget(
-                    Ionicons.ios_trash_outline, language.deleteAccount, () {
+                    Ionicons.trash_bin_sharp, language.deleteAccount, () {
                   launchScreen(context, DeleteAccountScreen(),
                       pageRouteAnimation: PageRouteAnimation.Slide);
                 }),
                 settingItemWidget(
                   !isAvailable
-                      ? Ionicons.flash_off_outline
-                      : Ionicons.flash_outline,
+                      ? Ionicons.flash_off_sharp
+                      : Ionicons.flash_sharp,
                   isAvailable ? language.available : language.notAvailable,
                   () {
                     //
@@ -233,10 +232,10 @@ class SettingScreenState extends State<SettingScreen> {
           children: [
             Container(
               padding: EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                  border: Border.all(color: dividerColor),
-                  borderRadius: radius(defaultRadius)),
-              child: Icon(icon, size: 20, color: primaryColor),
+              // decoration: BoxDecoration(
+              //     border: Border.all(color: dividerColor),
+              //     borderRadius: radius(defaultRadius)),
+              child: Icon(icon, size: 24, color: primaryColor),
             ),
             SizedBox(width: 12),
             Expanded(child: Text(title, style: primaryTextStyle())),

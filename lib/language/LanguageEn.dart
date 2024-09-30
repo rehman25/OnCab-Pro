@@ -531,7 +531,7 @@ class LanguageEn extends BaseLanguage {
   String get vehicleInfoUpdateSucessfully => 'Vehicle info update sucessfully';
 
   @override
-  String get isMandatoryDocument => '* is a mandatory document.';
+  String get isMandatoryDocument => '* is a mandatory documents.';
 
   @override
   String get someRequiredDocumentAreNotUploaded =>

@@ -178,7 +178,7 @@ class SignUpScreenState extends State<SignUpScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
         leading: BackButton(color: context.iconColor),
         title: Text(language.signUp, style: boldTextStyle()),
       ),
@@ -217,10 +217,10 @@ class SignUpScreenState extends State<SignUpScreen> {
                       ? StepState.disabled
                       : StepState.complete,
                   stepStyle: StepStyle(
-                    connectorColor: Colors.amber,
-                    color: Colors.amber,
+                    connectorColor: Colors.blue,
+                    color: Color(0xFF00155f),
                     indexStyle: const TextStyle(
-                      color: Colors.black,
+                      color: Colors.white,
                     ),
                   ),
                   title: Text(language.userDetail, style: boldTextStyle()),
@@ -372,10 +372,10 @@ class SignUpScreenState extends State<SignUpScreen> {
                       ? StepState.disabled
                       : StepState.complete,
                   stepStyle: StepStyle(
-                    color: Colors.amber,
-                    connectorColor: Colors.amber,
+                    color: Color(0xFF00155f),
+                    connectorColor: Color(0xFF00155f),
                     indexStyle: const TextStyle(
-                      color: Colors.black,
+                      color: Colors.white,
                     ),
                   ),
                   title: Text(language.selectService, style: boldTextStyle()),
@@ -434,10 +434,10 @@ class SignUpScreenState extends State<SignUpScreen> {
                       ? StepState.disabled
                       : StepState.complete,
                   stepStyle: StepStyle(
-                    color: Colors.amber,
-                    connectorColor: Colors.amber,
+                    color: Color(0xFF00155f),
+                    connectorColor: Color(0xFF00155f),
                     indexStyle: const TextStyle(
-                      color: Colors.black,
+                      color: Colors.white,
                     ),
                   ),
                   title: Text(language.carModel, style: boldTextStyle()),
@@ -456,10 +456,10 @@ class SignUpScreenState extends State<SignUpScreen> {
                       ? StepState.indexed
                       : StepState.complete,
                   stepStyle: StepStyle(
-                    color: Colors.amber,
-                    connectorColor: Colors.amber,
+                    color: Color(0xFF00155f),
+                    connectorColor: Color(0xFF00155f),
                     indexStyle: const TextStyle(
-                      color: Colors.black,
+                      color: Colors.white,
                     ),
                   ),
                   title:
@@ -479,9 +479,9 @@ class SignUpScreenState extends State<SignUpScreen> {
                       ? StepState.disabled
                       : StepState.complete,
                   stepStyle: StepStyle(
-                    color: Colors.amber,
+                    color: Color(0xFF00155f),
                     indexStyle: const TextStyle(
-                      color: Colors.black,
+                      color: Colors.white,
                     ),
                   ),
                   title: Text(language.carPlateNumber, style: boldTextStyle()),
@@ -500,10 +500,10 @@ class SignUpScreenState extends State<SignUpScreen> {
                       ? StepState.disabled
                       : StepState.complete,
                   stepStyle: StepStyle(
-                    color: Colors.amber,
-                    connectorColor: Colors.amber,
+                    color: Color(0xFF00155f),
+                    connectorColor: Color(0xFF00155f),
                     indexStyle: const TextStyle(
-                      color: Colors.black,
+                      color: Colors.white,
                     ),
                   ),
                   title: Text(language.carColor, style: boldTextStyle()),
